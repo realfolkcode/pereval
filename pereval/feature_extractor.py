@@ -32,13 +32,15 @@ class FeatureExtractor:
 
 def get_aria_embeddings(evaluation_dir: str,
                         model: nn.Module,
-                        device) -> Dict[str, torch.Tensor]:
+                        device,
+                        is_deadpan: bool = False) -> Dict[str, torch.Tensor]:
     """Constructs Aria embeddings for performances.
 
     Args:
         evaluation_dir: A directory with performances.
         model: Aria model.
         device: Device.
+        is_deadpan: If True, computes embeddings for scores/deadpan performances. 
 
     Return:
         A dictionary with score names as keys and performance embeddings
@@ -46,21 +48,41 @@ def get_aria_embeddings(evaluation_dir: str,
     """
     emb_dict = {}
 
+    ###################
+
+    if is_deadpan:
+        for score_name in tqdm(os.listdir(evaluation_dir)):
+            score_dir = os.path.join(evaluation_dir, score_name)
+            if not os.path.isdir(score_dir):
+                continue
+            deadpan_path = os.path.join(evaluation_dir, f"{score_name}.mid")
+            emb = get_global_embedding_from_midi(
+                model=model,
+                midi_path=deadpan_path,
+                device=device,
+            )
+            emb_dict[score_name] = emb.unsqueeze(0).cpu()
+        return emb_dict
+    
+    ###################
+
     for i, score_name in enumerate(tqdm(os.listdir(evaluation_dir))):
         score_dir = os.path.join(evaluation_dir, score_name)
-        if os.path.isdir(score_dir):
-            for perf_name in os.listdir(score_dir):
-                if perf_name.endswith(".mid") or perf_name.endswith(".midi"):
-                    perf_path = os.path.join(score_dir, perf_name)
-                    emb = get_global_embedding_from_midi(
-                        model=model,
-                        midi_path=perf_path,
-                        device=device,
-                    )
-                    if score_name not in emb_dict:
-                        emb_dict[score_name] = emb.unsqueeze(0).cpu()
-                    else:
-                        emb_dict[score_name] = torch.cat((emb_dict[score_name],
-                                                          emb.unsqueeze(0).cpu()), dim=0)
+        if not os.path.isdir(score_dir):
+            continue
+
+        for perf_name in os.listdir(score_dir):
+            if perf_name.endswith(".mid") or perf_name.endswith(".midi"):
+                perf_path = os.path.join(score_dir, perf_name)
+                emb = get_global_embedding_from_midi(
+                    model=model,
+                    midi_path=perf_path,
+                    device=device,
+                )
+                if score_name not in emb_dict:
+                    emb_dict[score_name] = emb.unsqueeze(0).cpu()
+                else:
+                    emb_dict[score_name] = torch.cat((emb_dict[score_name],
+                                                      emb.unsqueeze(0).cpu()), dim=0)
     
     return emb_dict
