@@ -42,7 +42,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--checkpoint_path', type=str, required=True, help='path to aria model checkpoint')
     parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
-    parser.add_argument('--is_deadpan', type=bool, required=True, default=True, help='if true, embeds scores')
+    parser.add_argument('--is_deadpan', action='store_true', help='if true, embeds scores')
 
     args = parser.parse_args()
 
