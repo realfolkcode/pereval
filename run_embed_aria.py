@@ -13,7 +13,7 @@ from pereval.feature_extractor import get_aria_embeddings
 def main(args):
     checkpoint_path = args.checkpoint_path
     evaluation_dir = args.evaluation_dir
-    is_deadpan = args.is_deadpan
+    is_first = args.is_first
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -27,12 +27,12 @@ def main(args):
     emb_dict = get_aria_embeddings(evaluation_dir,
                                    model,
                                    device,
-                                   is_deadpan=is_deadpan)
+                                   is_first=is_first)
 
-    if is_deadpan:
-        output_filename = "deadpan_aria_emb.pt"
+    if is_first:
+        output_filename = "first_aria_emb.pt"
     else:
-        output_filename = "aria_emb.pt"
+        output_filename = "aria_emb_fix.pt"
     
     emb_path = os.path.join(evaluation_dir, output_filename)
     torch.save(emb_dict, emb_path)
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--checkpoint_path', type=str, required=True, help='path to aria model checkpoint')
     parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
-    parser.add_argument('--is_deadpan', action='store_true', help='if true, embeds scores')
+    parser.add_argument('--is_first', action='store_true', help='if true, embeds only the first chunk of a midi')
 
     args = parser.parse_args()
 

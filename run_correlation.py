@@ -31,6 +31,8 @@ def get_dataset_correlation(real_dir: str,
         score = partitura.load_score_midi(score_path).note_array()
 
         gen_score_dir = os.path.join(gen_dir, score_name)
+        if not os.path.isdir(gen_score_dir):
+            continue
 
         real_perf_lst = []
         real_score_perf_indices_lst = []

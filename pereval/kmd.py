@@ -1,7 +1,8 @@
 """Some code is borrowed from: https://github.com/YoonjinXD/kadtk"""
 
 import torch
-from typing import List
+import numpy as np
+from typing import List, Dict
 
 
 def median_pairwise_distance(x, subsample=None):
@@ -46,6 +47,18 @@ class KernelMusicDistance:
         """
         self.scale_factor = scale_factor
     
+    def calculate_bandwidth(self,
+                            ref_emb: torch.Tensor,
+                            precision=torch.float32) -> None:
+        """Calculates the kernel bandwidth.
+
+        Args:
+            ref_emb: The set of reference embeddings.
+            precision: Type setting for matrix calculation precision.
+        """
+        ref_emb = ref_emb.to(dtype=precision)
+        self.bandwidth = median_pairwise_distance(ref_emb)
+    
     def compute_kmd(
         self,
         x: torch.Tensor,
@@ -75,9 +88,8 @@ class KernelMusicDistance:
         x = x.to(dtype=precision)
         y = y.to(dtype=precision)
 
-        # Use median distance heuristic if bandwidth not provided
         if bandwidth is None:
-            bandwidth = median_pairwise_distance(y)
+            bandwidth = self.bandwidth
 
         m, n = x.shape[0], y.shape[0]
         
@@ -129,41 +141,109 @@ class KernelMusicDistance:
 class KernelPerformanceDistance:
     def __init__(self,
                  scale_factor: float = 100):
-        """Initializes an instance of KernelPerformanceDistance.
+        """Initializes an instance of KernelMusicDistance.
         
         Args:
-            scale_factor: Scale factor of KPD.
+            scale_factor: Scale factor of KMD.
         """
         self.scale_factor = scale_factor
+    
+    def calculate_bandwidth(self,
+                            ref_emb: torch.Tensor,
+                            label_lst: List[str],
+                            precision=torch.float32) -> None:
+        """Calculates the kernel bandwidth.
+
+        Args:
+            ref_emb: The set of reference embeddings.
+            label_lst: The list of labels.
+            precision: Type setting for matrix calculation precision.
+        """
+        ref_emb = ref_emb.to(dtype=precision)
+
+        label_lst = np.array(label_lst)
+        n = len(label_lst)
+
+        dist_lst = []
+        for i in range(n):
+            for j in range(i+1, n):
+                if label_lst[i] == label_lst[j]:
+                    dist = torch.linalg.vector_norm(ref_emb[i] - ref_emb[j])
+                    dist_lst.append(dist.item())
+        dist_lst = torch.tensor(dist_lst)
+        self.bandwidth = torch.median(dist_lst).item()
+    
+    def compute_kmd(
+        self,
+        x: torch.Tensor,
+        y: torch.Tensor,
+        kernel,
+        eps=1e-8
+    ):
+        m, n = x.shape[0], y.shape[0]
+        
+        xx = x @ x.T
+        x_sqnorms = torch.diagonal(xx)
+        d2_xx = x_sqnorms.unsqueeze(1) + x_sqnorms.unsqueeze(0) - 2 * xx # shape (m, m)
+                
+        k_xx = kernel(d2_xx)
+        k_xx = k_xx - torch.diag(torch.diagonal(k_xx))
+        k_xx_mean = k_xx.sum() / (m * (m - 1))
+
+        yy = y @ y.T
+        y_sqnorms = torch.diagonal(yy)
+        d2_yy = y_sqnorms.unsqueeze(1) + y_sqnorms.unsqueeze(0) - 2 * yy # shape (n, n)
+
+        k_yy = kernel(d2_yy)
+        k_yy = k_yy - torch.diag(torch.diagonal(k_yy))
+        k_yy_mean = k_yy.sum() / (n * (n - 1))
+        
+        # Compute kernel statistics for xy
+        xy = x @ y.T
+        d2_xy = x_sqnorms.unsqueeze(1) + y_sqnorms.unsqueeze(0) - 2 * xy # shape (m, n)
+        k_xy = kernel(d2_xy)
+        k_xy_mean = k_xy.mean()
+
+        k_xx_mean *= self.scale_factor
+        k_yy_mean *= self.scale_factor
+        k_xy_mean *= self.scale_factor
+        
+        #result = k_xx_mean + k_yy_mean - 2 * k_xy_mean
+        return k_xx_mean, k_yy_mean, -2 * k_xy_mean
     
     def compute_kpd(
         self,
         x: torch.Tensor,
         y: torch.Tensor,
-        label_lst: List,
+        x_label_lst: List[str],
+        y_label_lst: List[str],
         bandwidth=None,
         kernel='gaussian',
         precision=torch.float32,
-        eps=1e-8
-    ) -> torch.Tensor:
+        eps=1e-8,
+        return_components=False):
         """
-        Compute the Kernel Performance Distance (KPD) between two samples using PyTorch.
+        Compute the Kernel Music Distance (KAD) between two samples using PyTorch.
 
         Args:
-            x: The first set of embeddings of shape (m, embedding_dim).
-            y: The second set of embeddings of shape (n, embedding_dim).
-            label_lst: The list of labels.
+            x: The set of model embeddings of shape (m, embedding_dim).
+            y: The set of reference embeddings of shape (n, embedding_dim).
+            x_label_lst: The list of labels for x.
+            y_label_lst: The list of labels for y. 
             bandwidth: The bandwidth value for the Gaussian RBF kernel.
             kernel: Kernel function to use ('gaussian', 'iq', 'imq').
             precision: Type setting for matrix calculation precision.
             eps: Small value to prevent division by zero.
+            return_components: If True, returns mean components.
 
         Returns:
             The KPD between x and y embedding sets.
         """
-        # Use median distance heuristic if bandwidth not provided
+        x = x.to(dtype=precision)
+        y = y.to(dtype=precision)
+
         if bandwidth is None:
-            bandwidth = median_pairwise_distance(y)
+            bandwidth = self.bandwidth
         
         # Define kernel functions
         gamma = 1 / (2 * bandwidth**2 + eps)
@@ -175,46 +255,30 @@ class KernelPerformanceDistance:
             kernel = lambda a: 1 / torch.sqrt(1 + gamma * a)
         else:
             raise ValueError("Invalid kernel type. Valid kernels: 'gaussian', 'iq', 'imq'")
-        
-        n = len(x)
 
-        xx = x @ x.T
-        x_sqnorms = torch.diagonal(xx)
-        d2_xx = x_sqnorms.unsqueeze(1) + x_sqnorms.unsqueeze(0) - 2 * xx # shape (n, n)
-                
-        k_xx = kernel(d2_xx)
-        k_xx = k_xx - torch.diag(torch.diagonal(k_xx))
+        unique_labels = set(x_label_lst)
+        x_label_lst = np.array(x_label_lst)
+        y_label_lst = np.array(y_label_lst)
 
-        yy = y @ y.T
-        y_sqnorms = torch.diagonal(yy)
-        d2_yy = y_sqnorms.unsqueeze(1) + y_sqnorms.unsqueeze(0) - 2 * yy # shape (n, n)
+        k_xx_lst = []
+        k_yy_lst = []
+        k_xy_lst = []
 
-        k_yy = kernel(d2_yy)
-        k_yy = k_yy - torch.diag(torch.diagonal(k_yy))
-        
-        # Compute kernel statistics for xy
-        xy = x @ y.T
-        d2_xy = x_sqnorms.unsqueeze(1) + y_sqnorms.unsqueeze(0) - 2 * xy # shape (n, n)
-        k_xy = kernel(d2_xy)
-        k_xy = k_xy - torch.diag(torch.diagonal(k_xy))
+        for label in unique_labels:
+            if (x_label_lst == label).sum() < 2:
+                continue
+            k_xx, k_yy, k_xy = self.compute_kmd(x[x_label_lst == label],
+                                                y[y_label_lst == label], 
+                                                kernel)
+            k_xx_lst.append(k_xx.item())
+            k_yy_lst.append(k_yy.item())
+            k_xy_lst.append(k_xy.item())
 
-        h = k_xx + k_yy - 2 * k_xy
+        k_xx = torch.tensor(k_xx_lst).mean().item()
+        k_yy = torch.tensor(k_yy_lst).mean().item()
+        k_xy = torch.tensor(k_xy_lst).mean().item()
 
-        k_label = torch.zeros_like(h)
-        for i in range(n):
-            for j in range(n):
-                k_label[i, j] = int(label_lst[i] == label_lst[j])
+        if return_components:
+            return k_xx, k_yy, k_xy
 
-        h = h * k_label
-        h_mean = h.sum() / (n * (n - 1))
-
-        return h_mean
-    
-    def _compute_h(self,
-                   x1,
-                   x2,
-                   y1,
-                   y2,
-                   kernel):
-        return kernel(((x1 - x2)**2).sum()) + kernel(((y1 - y2)**2).sum()) \
-             - kernel(((x1 - y2)**2).sum()) - kernel(((x2 - y1)**2).sum())
+        return k_xx + k_yy + k_xy
