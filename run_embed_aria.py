@@ -14,6 +14,7 @@ def main(args):
     checkpoint_path = args.checkpoint_path
     evaluation_dir = args.evaluation_dir
     is_first = args.is_first
+    is_random = args.is_random
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -22,7 +23,8 @@ def main(args):
     model_config.set_vocab_size(AbsTokenizer().vocab_size)
     model = TransformerEMB(model_config).to(device)
     state_dict = load_file(filename=checkpoint_path)
-    model.load_state_dict(state_dict=state_dict, strict=True)
+    if not is_random:
+        model.load_state_dict(state_dict=state_dict, strict=True)
 
     emb_dict = get_aria_embeddings(evaluation_dir,
                                    model,
@@ -31,6 +33,8 @@ def main(args):
 
     if is_first:
         output_filename = "first_aria_emb.pt"
+    elif is_random:
+        output_filename = "random_aria_emb.pt"
     else:
         output_filename = "aria_emb_fix.pt"
     
@@ -43,6 +47,7 @@ if __name__ == "__main__":
     parser.add_argument('--checkpoint_path', type=str, required=True, help='path to aria model checkpoint')
     parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
     parser.add_argument('--is_first', action='store_true', help='if true, embeds only the first chunk of a midi')
+    parser.add_argument('--is_random', action='store_true', help='if true, initializes random aria models')
 
     args = parser.parse_args()
 
