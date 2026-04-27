@@ -4,7 +4,6 @@ import numpy as np
 import torch
 from dtaidistance import dtw, dtw_ndim, ed
 from tqdm import tqdm
-from typing import Dict, List
 
 
 def load_embeddings(emb_dir):
