@@ -1,4 +1,6 @@
-"""Some code is borrowed from: https://github.com/microsoft/fadtk"""
+"""
+Code is adapted from: https://github.com/microsoft/fadtk
+"""
 
 import numpy as np
 import scipy

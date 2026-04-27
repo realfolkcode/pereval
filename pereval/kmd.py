@@ -1,4 +1,6 @@
-"""Some code is borrowed from: https://github.com/YoonjinXD/kadtk"""
+"""
+Code is adapted from: https://github.com/YoonjinXD/kadtk
+"""
 
 import torch
 import numpy as np
@@ -64,19 +66,17 @@ class KernelMusicDistance:
         x: torch.Tensor,
         y: torch.Tensor,
         bandwidth=None,
-        kernel='gaussian',
         precision=torch.float32,
         eps=1e-8,
         return_components=False,
     ) -> torch.Tensor:
         """
-        Compute the Kernel Music Distance (KAD) between two samples using PyTorch.
+        Compute the Kernel Music Distance (KMD) between two samples using PyTorch.
 
         Args:
             x: The set of model embeddings of shape (m, embedding_dim).
             y: The set of reference embeddings of shape (n, embedding_dim).
             bandwidth: The bandwidth value for the Gaussian RBF kernel.
-            kernel: Kernel function to use ('gaussian', 'iq', 'imq').
             precision: Type setting for matrix calculation precision.
             eps: Small value to prevent division by zero.
             return_components: If True, returns mean components.
@@ -93,16 +93,8 @@ class KernelMusicDistance:
 
         m, n = x.shape[0], y.shape[0]
         
-        # Define kernel functions
         gamma = 1 / (2 * bandwidth**2 + eps)
-        if kernel == 'gaussian':    # Gaussian Kernel
-            kernel = lambda a: torch.exp(-gamma * a)
-        elif kernel == 'iq':        # Inverse Quadratic Kernel
-            kernel = lambda a: 1 / (1 + gamma * a)
-        elif kernel == 'imq':       # Inverse Multiquadric Kernel
-            kernel = lambda a: 1 / torch.sqrt(1 + gamma * a)
-        else:
-            raise ValueError("Invalid kernel type. Valid kernels: 'gaussian', 'iq', 'imq'")
+        kernel = lambda a: torch.exp(-gamma * a)
         
         xx = x @ x.T
         x_sqnorms = torch.diagonal(xx)
@@ -221,7 +213,6 @@ class KernelPerformanceDistance:
         x_label_lst: List[str],
         y_label_lst: List[str],
         bandwidth=None,
-        kernel='gaussian',
         precision=torch.float32,
         eps=1e-8,
         return_components=False):
@@ -234,7 +225,6 @@ class KernelPerformanceDistance:
             x_label_lst: The list of labels for x.
             y_label_lst: The list of labels for y. 
             bandwidth: The bandwidth value for the Gaussian RBF kernel.
-            kernel: Kernel function to use ('gaussian', 'iq', 'imq').
             precision: Type setting for matrix calculation precision.
             eps: Small value to prevent division by zero.
             return_components: If True, returns mean components.
@@ -248,16 +238,8 @@ class KernelPerformanceDistance:
         if bandwidth is None:
             bandwidth = self.bandwidth
         
-        # Define kernel functions
         gamma = 1 / (2 * bandwidth**2 + eps)
-        if kernel == 'gaussian':    # Gaussian Kernel
-            kernel = lambda a: torch.exp(-gamma * a)
-        elif kernel == 'iq':        # Inverse Quadratic Kernel
-            kernel = lambda a: 1 / (1 + gamma * a)
-        elif kernel == 'imq':       # Inverse Multiquadric Kernel
-            kernel = lambda a: 1 / torch.sqrt(1 + gamma * a)
-        else:
-            raise ValueError("Invalid kernel type. Valid kernels: 'gaussian', 'iq', 'imq'")
+        kernel = lambda a: torch.exp(-gamma * a)
 
         unique_labels = set(x_label_lst)
         x_label_lst = np.array(x_label_lst)
