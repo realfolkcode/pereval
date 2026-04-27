@@ -8,7 +8,9 @@ def calculate_correlation(score,
                           gen_perf,
                           real_score_perf_indices,
                           gen_score_perf_indices,
-                          note_aligner) -> Dict[str, float]:
+                          note_aligner,
+                          left_percentage: float | None = None,
+                          right_percentage: float | None = None) -> Dict[str, float]:
     """Calculates correlation between two performances.
     
     Args:
@@ -17,8 +19,10 @@ def calculate_correlation(score,
         real_score_perf_indices: Score-to-performance alignment
           for real performance.
         gen_score_perf_indices: Score-to-performance alignment
-          for genetated performance.
+          for generated performance.
         note_aligner: Note aligner.
+        left_percentage: The left fraction of notes from 0 to 1.
+        right_percentage: The right fraction of notes from 0 to 1.
     
     Returns:
         A dictionary with attribute correlations.
@@ -26,6 +30,22 @@ def calculate_correlation(score,
     score_indices, real_score_indices, gen_score_indices = np.intersect1d(real_score_perf_indices[0],
                                                                           gen_score_perf_indices[0],
                                                                           return_indices=True)
+
+    if left_percentage is not None:
+        assert len(score_indices) == len(real_score_indices)
+        assert len(score_indices) == len(gen_score_indices)
+
+        start_score = int(left_percentage * len(score_indices))
+        end_score = int(right_percentage * len(score_indices))
+        score_indices = score_indices[start_score:end_score]
+
+        start_real = int(left_percentage * len(real_score_indices))
+        end_real = int(right_percentage * len(real_score_indices))
+        real_score_indices = real_score_indices[start_real:end_real]
+
+        start_gen = int(left_percentage * len(gen_score_indices))
+        end_gen = int(right_percentage * len(gen_score_indices))
+        gen_score_indices = gen_score_indices[start_gen:end_gen]
 
     real_perf_indices = real_score_perf_indices[1][real_score_indices]
     gen_perf_indices = gen_score_perf_indices[1][gen_score_indices]

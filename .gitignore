@@ -20,6 +20,7 @@ checkpoints/
 configs/
 tmp_gradio/
 figures/
+toy_data/
 
 # User-specific files
 *.rsuser

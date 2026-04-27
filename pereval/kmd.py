@@ -141,7 +141,7 @@ class KernelMusicDistance:
 class KernelPerformanceDistance:
     def __init__(self,
                  scale_factor: float = 100):
-        """Initializes an instance of KernelMusicDistance.
+        """Initializes an instance of KernelPerformanceDistance.
         
         Args:
             scale_factor: Scale factor of KMD.
@@ -177,9 +177,13 @@ class KernelPerformanceDistance:
         self,
         x: torch.Tensor,
         y: torch.Tensor,
-        kernel,
+        kernel = None,
         eps=1e-8
     ):
+        if kernel is None:
+            gamma = 1 / (2 * self.bandwidth**2 + eps)
+            kernel = lambda a: torch.exp(-gamma * a)
+        
         m, n = x.shape[0], y.shape[0]
         
         xx = x @ x.T
@@ -207,8 +211,7 @@ class KernelPerformanceDistance:
         k_xx_mean *= self.scale_factor
         k_yy_mean *= self.scale_factor
         k_xy_mean *= self.scale_factor
-        
-        #result = k_xx_mean + k_yy_mean - 2 * k_xy_mean
+
         return k_xx_mean, k_yy_mean, -2 * k_xy_mean
     
     def compute_kpd(
@@ -223,7 +226,7 @@ class KernelPerformanceDistance:
         eps=1e-8,
         return_components=False):
         """
-        Compute the Kernel Music Distance (KAD) between two samples using PyTorch.
+        Compute the Kernel Performance Distance (KPD) between two samples using PyTorch.
 
         Args:
             x: The set of model embeddings of shape (m, embedding_dim).

@@ -16,7 +16,11 @@ warnings.filterwarnings('ignore')
 
 def get_dataset_correlation(real_dir: str,
                             gen_dir: str,
-                            root_score_dir: str) -> Dict[str, List]:
+                            real_alignment_dir: str,
+                            gen_alignment_dir: str,
+                            root_score_dir: str,
+                            left_percentage: float | None = None,
+                            right_percentage: float | None = None) -> Dict[str, List]:
     note_aligner = NoteAligner()
 
     ioi_corr_dict = {}
@@ -47,7 +51,9 @@ def get_dataset_correlation(real_dir: str,
             real_perf = real_perf.note_array()
 
             real_alignment_path = real_perf_name[:-4] + ".match"
-            real_alignment_path = os.path.join(real_score_dir, real_alignment_path)
+            real_alignment_path = os.path.join(real_alignment_dir,
+                                               score_name,
+                                               real_alignment_path)
 
             real_score_perf_indices = note_aligner.load_score_perf_alignment(real_alignment_path,
                                                                              perf=real_perf,
@@ -63,7 +69,9 @@ def get_dataset_correlation(real_dir: str,
             gen_perf = gen_perf.note_array()
 
             gen_alignment_path = gen_perf_name[:-4] + ".match"
-            gen_alignment_path = os.path.join(gen_score_dir, gen_alignment_path)
+            gen_alignment_path = os.path.join(gen_alignment_dir,
+                                              score_name,
+                                              gen_alignment_path)
 
             gen_score_perf_indices = note_aligner.load_score_perf_alignment(gen_alignment_path,
                                                                             perf=gen_perf,
@@ -90,7 +98,9 @@ def get_dataset_correlation(real_dir: str,
                                              gen_perf=gen_perf,
                                              real_score_perf_indices=real_score_perf_indices,
                                              gen_score_perf_indices=gen_score_perf_indices,
-                                             note_aligner=note_aligner)
+                                             note_aligner=note_aligner,
+                                             left_percentage=left_percentage,
+                                             right_percentage=right_percentage)
                 ioi_corr_dict[score_name][i, j] = corr['ioi']
                 vel_corr_dict[score_name][i, j] = corr['velocity']
                 duration_corr_dict[score_name][i, j] = corr['duration']
@@ -103,14 +113,22 @@ def get_dataset_correlation(real_dir: str,
 def main(args):
     real_dir = args.real_dir
     gen_dir = args.gen_dir
+    real_alignment_dir = args.real_alignment_dir
+    gen_alignment_dir = args.gen_alignment_dir
     score_dir = args.score_dir
     output_filename = args.output_filename
+    left_percentage = args.left_percentage
+    right_percentage = args.right_percentage
 
     output_path = os.path.join(gen_dir, output_filename)
 
     corr_dict = get_dataset_correlation(real_dir=real_dir,
                                         gen_dir=gen_dir,
-                                        root_score_dir=score_dir)
+                                        real_alignment_dir=real_alignment_dir,
+                                        gen_alignment_dir=gen_alignment_dir,
+                                        root_score_dir=score_dir,
+                                        left_percentage=left_percentage,
+                                        right_percentage=right_percentage)
     torch.save(corr_dict, output_path)
 
 
@@ -118,8 +136,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--real_dir', type=str, required=True, help='path to directory with real performances')
     parser.add_argument('--gen_dir', type=str, required=True, help='path to directory with generated performances')
+    parser.add_argument('--real_alignment_dir', type=str, required=True, help='directory with alignments for real performances')
+    parser.add_argument('--gen_alignment_dir', type=str, required=True, help='directory with alignments for generated performances')
     parser.add_argument('--score_dir', type=str, required=True, help='path to directory with scores')
     parser.add_argument('--output_filename', type=str, required=True, help='filename of output correlation')
+    parser.add_argument('--left_percentage', type=float, required=False, default=None, help='left fraction of notes to use')
+    parser.add_argument('--right_percentage', type=float, required=False, default=None, help='right fraction of notes to use')
 
     args = parser.parse_args()
 
