@@ -1,10 +1,10 @@
 # Pereval: Performance Evaluation toolkit
 
-This source code is part of the anonymized supplementary material for the ISMIR 2026 submission paper "Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances".
+This is an official repository for the paper "Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances" (**ISMIR 2026**).
 
-Please do not redistribute. This code is only available as part of the reviewing process.
+Authors: Dmitrii Gavrilev, Ilya Borovik, and Vladimir Viro
 
-**NOTE:** The documentation and requirements are not available in the current version. We will reformat and release the more accessible version upon the acceptance.
+**NOTE:** The documentation and requirements are still being prepared.
 
 ## Repository structure:
 
@@ -20,4 +20,4 @@ Please do not redistribute. This code is only available as part of the reviewing
 Other scripts are miscellaneous.
 
 **Notebooks:**
-- We will make the data analysis notebooks available upon the acceptance. 
+- We will make the data analysis notebooks available soon.
