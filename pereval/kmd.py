@@ -82,7 +82,7 @@ class KernelMusicDistance:
             return_components: If True, returns mean components.
 
         Returns:
-            The KAD between x and y embedding sets.
+            The KMD between x and y embedding sets.
         """
         # Ensure x and y are of the correct precision
         x = x.to(dtype=precision)
