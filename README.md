@@ -9,6 +9,7 @@ Authors: Dmitrii Gavrilev, Ilya Borovik, and Vladimir Viro
 ## Repository structure:
 
 - `/pereval/` contains the main utilities (such as alignment, feature extraction, calculation of attribute-scoped and deep feature metrics) used in our research paper
+- `/scripts/` contains the scripts used to reproduce the experiments in the paper
 
 **Scripts**
 - `run_save_alignment.py` - calculates the note alignment using Parangonar
@@ -17,6 +18,7 @@ Authors: Dmitrii Gavrilev, Ilya Borovik, and Vladimir Viro
 - `run_embed_aria.py` - extracts Aria embeddings
 - `run_shift_notes.py` - shifts (truncates the first few) notes in performances
 - `run_permute_velocity.py` - transfers the velocities of the notes between performances
+
 Other scripts are miscellaneous.
 
 **Notebooks:**
