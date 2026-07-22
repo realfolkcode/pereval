@@ -57,7 +57,8 @@ class MahalanobisRating:
         """Predicts a pseudo-rating.
         
         Args:
-            emb: The embeddings of shape (N, D) for which the ratings should be predicted.
+            emb: The embeddings of shape (N, D) for which the ratings should
+              be predicted.
             ref_emb: The reference embeddings.
         
         Returns:
@@ -90,10 +91,52 @@ class MarginalMahalanobisRating:
         """Predicts a pseudo-rating.
         
         Args:
-            emb: The embeddings of shape (N, D) for which the ratings should be predicted.
+            emb: The embeddings of shape (N, D) for which the ratings should
+              be predicted.
         
         Returns:
             An array of ratings of shape (N,).
         """
         rating = self.marginal_cov.mahalanobis(emb)
+        return rating
+
+
+class RelativeMahalanobisRating:
+    """Pseudo-rating based on Relative Mahalanobis distance."""
+
+    def fit_precision(self,
+                      cov_emb: NDArray,
+                      score_lst: List[str]):
+        """Fits score-conditional precision matrix.
+
+        Args:
+            cov_emb: The embeddings of shape (N, D).
+            score_lst: The names of the pieces for each embedding.
+        """
+        self.inv_cov = estimate_score_precision(cov_emb=cov_emb,
+                                                score_lst=score_lst)
+        self.marginal_cov = LedoitWolf().fit(cov_emb)
+
+    def predict(self,
+                emb: NDArray,
+                ref_emb: NDArray) -> NDArray:
+        """Predicts a pseudo-rating.
+        
+        Args:
+            emb: The embeddings of shape (N, D) for which the ratings should
+              be predicted.
+            ref_emb: The reference embeddings.
+        
+        Returns:
+            An array of ratings of shape (N,).
+        """
+        diff = emb - ref_emb.mean(0)
+        if len(diff.shape) < 2:
+            diff = diff.unsqueeze(0)
+        
+        rating = diff @ self.inv_cov @ diff.T
+        rating = np.diagonal(rating)
+        
+        rating = rating - self.marginal_cov.mahalanobis(emb)
+
         return rating
