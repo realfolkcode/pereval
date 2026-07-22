@@ -57,7 +57,7 @@ class MahalanobisRating:
         """Predicts a pseudo-rating.
         
         Args:
-            pred_emb: The embeddings of shape (N, D) for which the ratings should be predicted.
+            emb: The embeddings of shape (N, D) for which the ratings should be predicted.
             ref_emb: The reference embeddings.
         
         Returns:
@@ -70,4 +70,30 @@ class MahalanobisRating:
         rating = diff @ self.inv_cov @ diff.T
         rating = np.diagonal(rating)
 
+        return rating
+
+
+class MarginalMahalanobisRating:
+    """Pseudo-rating based on Marginal Mahalanobis distance."""
+
+    def fit_precision(self,
+                      cov_emb: NDArray):
+        """Fits marginal precision matrix.
+
+        Args:
+            cov_emb: The embeddings of shape (N, D).
+        """
+        self.marginal_cov = LedoitWolf().fit(cov_emb)
+
+    def predict(self,
+                emb: NDArray) -> NDArray:
+        """Predicts a pseudo-rating.
+        
+        Args:
+            emb: The embeddings of shape (N, D) for which the ratings should be predicted.
+        
+        Returns:
+            An array of ratings of shape (N,).
+        """
+        rating = self.marginal_cov.mahalanobis(emb)
         return rating
