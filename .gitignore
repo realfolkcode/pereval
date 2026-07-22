@@ -16,6 +16,7 @@ models/
 wandb/
 #tokenizers/
 wip_notebooks/
+misc_scripts/
 checkpoints/
 configs/
 tmp_gradio/
