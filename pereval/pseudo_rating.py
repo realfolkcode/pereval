@@ -64,12 +64,16 @@ class MahalanobisRating:
         Returns:
             An array of ratings of shape (N,).
         """
+        D = emb.shape[-1]
+
         diff = emb - ref_emb.mean(0)
         if len(diff.shape) < 2:
             diff = diff.unsqueeze(0)
         
         rating = diff @ self.inv_cov @ diff.T
         rating = np.diagonal(rating)
+
+        rating = -rating / D
 
         return rating
 
@@ -97,7 +101,11 @@ class MarginalMahalanobisRating:
         Returns:
             An array of ratings of shape (N,).
         """
+        D = emb.shape[-1]
+
         rating = self.marginal_cov.mahalanobis(emb)
+
+        rating = -rating / D
         return rating
 
 
@@ -130,6 +138,8 @@ class RelativeMahalanobisRating:
         Returns:
             An array of ratings of shape (N,).
         """
+        D = emb.shape[-1]
+
         diff = emb - ref_emb.mean(0)
         if len(diff.shape) < 2:
             diff = diff.unsqueeze(0)
@@ -138,5 +148,7 @@ class RelativeMahalanobisRating:
         rating = np.diagonal(rating)
         
         rating = rating - self.marginal_cov.mahalanobis(emb)
+
+        rating = -rating / D
 
         return rating
