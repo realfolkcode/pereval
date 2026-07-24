@@ -22,3 +22,7 @@ Authors: Dmitrii Gavrilev, Ilya Borovik, and Vladimir Viro
 
 **Notebooks:**
 - `mahalanobis_pseudo_ratings.ipynb` - comparing Mahalanobis-based performance pseudo-ratings with human MOS from the listening test 
+
+## Acknowledgements
+
+We would like to thank the authors of [FADtk](https://github.com/microsoft/fadtk), [KADtk](https://github.com/YoonjinXD/kadtk), [Aria](https://github.com/EleutherAI/aria), [CLaMP3](https://github.com/sanderwood/clamp3), and [Parangonar](https://github.com/sildater/parangonar) for their open source contributions in music and audio research.
