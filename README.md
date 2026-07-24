@@ -21,7 +21,7 @@ Authors: Dmitrii Gavrilev, Ilya Borovik, and Vladimir Viro
 - `run_permute_velocity.py` - transfers the velocities of the notes between performances
 
 **Notebooks:**
-- `mahalanobis_pseudo_ratings.ipynb` - comparing Mahalanobis-based performance pseudo-ratings with human MOS from the listening test 
+- `mahalanobis_pseudo_ratings.ipynb` - comparing Mahalanobis-based Aria pseudo-ratings with human MOS from the listening test 
 
 ## Acknowledgements
 

@@ -9,17 +9,24 @@ from tqdm import tqdm
 from aria.embedding import get_global_embedding_from_midi, \
                            _validate_midi_for_emb, _get_chunks, \
                            MAX_EMBEDDING_SEQ_LEN, get_embedding_from_seq
-from aria.model import TransformerEMB
 from ariautils.tokenizer import AbsTokenizer
 from ariautils.midi import MidiDict
 
 
 class CLAMPExtractor:
-    def __init__(self):
-        pass
+    """Feature extractor for CLAMP3 model."""
 
     def extract_features(self,
-                         emb_dir: str):
+                         emb_dir: str) -> Tuple[NDArray, List, List]:
+        """Extracts features from a directory.
+
+        Args:
+            emb_dir: The directory where embeddings are stored.
+
+        Returns:
+            Embeddings of shape (N, D), a list of score names,
+            and a list of performance names.
+        """
         emb_lst = []
         score_lst = []
         perf_lst = []
@@ -49,6 +56,8 @@ class CLAMPExtractor:
 
 
 class FeatureExtractor:
+    """Feature extractor for Aria model."""
+
     def extract_features(self,
                          emb_path: str) -> Tuple[NDArray, List, List]:
         """Extracts features from a .pt file.
@@ -86,7 +95,6 @@ def get_aria_embeddings(evaluation_dir: str,
         evaluation_dir: A directory with performances.
         model: Aria model.
         device: Device.
-        is_deadpan: If True, computes embeddings for scores/deadpan performances.
         is_first: If True, computes embeddings only for the first chunk of a MIDI.
 
     Return:
@@ -123,6 +131,8 @@ def get_aria_embeddings(evaluation_dir: str,
 
 def create_aria_seq_mask(seq: List) -> torch.tensor:
     """Creates a mask for Aria token sequence.
+
+    (Experimental; not used in the paper)
     
     Args:
         seq: Sequence.
@@ -148,6 +158,8 @@ def get_full_embedding_from_midi(model,
                                  device: str = "cuda",
                                  is_contrastive: bool = True) -> torch.tensor:
     """Calculates a full MIDI embedding with Aria.
+
+    (Experimental; not used in the paper)
 
     Args:
         model: Aria model.
@@ -201,6 +213,8 @@ def get_first_embedding_from_midi(model,
                                   notes_per_chunk: int = 300,
                                   device: str = "cuda") -> torch.tensor:
     """Calculates MIDI embedding for the first chunk with Aria.
+
+    (Experimental; not used in the paper)
 
     Args:
         model: Aria model.
