@@ -18,6 +18,14 @@ We adapt recently proposed kernel-based methods from image and audio generation 
 
 In short, this project aims to go beyond the traditional metrics for expressive MIDI piano performances and unify them under one toolkit to simplify evaluation routines for MIR practitioners.
 
+## Installation
+
+1. Prerequisites: Please install [torch](https://pytorch.org/) (only versions >=2.3 are supported officially)
+2. Install pereval:
+```sh
+pip install pereval
+```
+
 ## Repository structure:
 
 - `/pereval/` contains the main utilities (such as alignment, feature extraction, calculation of attribute-scoped and deep feature metrics) used in our research paper
