@@ -1,4 +1,4 @@
-# Pereval: Performance Evaluation toolkit
+# Pereval: Piano Performance Evaluation toolkit
 
 ## Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances
 
@@ -16,7 +16,7 @@ Traditional metrics (which we coin **attribute-scoped**), such as *Pearson corre
 
 We adapt recently proposed kernel-based methods from image and audio generation domains for EPR. **Deep feature metrics**, *Kernel Music Distance* (KMD) and *Kernel Performance Distance* (KPD), leverage rich contextual features from Aria and CLaMP3 symbolic music understanding models. The adapted metrics are scalable (do not require alignments) and contextual.
 
-In short, this project aims to go beyond the traditional metrics for EPR and unify them under one toolkit to simplify evaluation routines for MIR practitioners.
+In short, this project aims to go beyond the traditional metrics for expressive MIDI piano performances and unify them under one toolkit to simplify evaluation routines for MIR practitioners.
 
 ## Repository structure:
 

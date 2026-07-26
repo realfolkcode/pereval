@@ -12,9 +12,7 @@ from pereval.feature_extractor import get_aria_embeddings
 
 def main(args):
     checkpoint_path = args.checkpoint_path
-    evaluation_dir = args.evaluation_dir
-    is_first = args.is_first
-    is_random = args.is_random
+    output_dir = args.output_dir
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -23,31 +21,22 @@ def main(args):
     model_config.set_vocab_size(AbsTokenizer().vocab_size)
     model = TransformerEMB(model_config).to(device)
     state_dict = load_file(filename=checkpoint_path)
-    if not is_random:
-        model.load_state_dict(state_dict=state_dict, strict=True)
+    model.load_state_dict(state_dict=state_dict, strict=True)
 
-    emb_dict = get_aria_embeddings(evaluation_dir,
+    emb_dict = get_aria_embeddings(output_dir,
                                    model,
-                                   device,
-                                   is_first=is_first)
+                                   device)
 
-    if is_first:
-        output_filename = "first_aria_emb.pt"
-    elif is_random:
-        output_filename = "random_aria_emb.pt"
-    else:
-        output_filename = "aria_emb_fix.pt"
+    output_filename = "aria_emb_fix.pt"
+    emb_path = os.path.join(output_dir, output_filename)
     
-    emb_path = os.path.join(evaluation_dir, output_filename)
     torch.save(emb_dict, emb_path)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--checkpoint_path', type=str, required=True, help='path to aria model checkpoint')
-    parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
-    parser.add_argument('--is_first', action='store_true', help='if true, embeds only the first chunk of a midi')
-    parser.add_argument('--is_random', action='store_true', help='if true, initializes random aria models')
+    parser.add_argument('--output_dir', type=str, required=True, help='path to output dir')
 
     args = parser.parse_args()
 
