@@ -7,7 +7,13 @@ from symusic import Score, Note
 from tqdm import tqdm
 
 
-def main(args):
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
+    parser.add_argument('--output_dir', type=str, required=True, help='path to output directory')
+
+    args = parser.parse_args()
+
     evaluation_dir = args.evaluation_dir
     output_dir = args.output_dir
 
@@ -66,10 +72,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
-    parser.add_argument('--output_dir', type=str, required=True, help='path to output directory')
-
-    args = parser.parse_args()
-
-    main(args)
+    main()

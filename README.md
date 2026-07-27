@@ -23,22 +23,21 @@ In short, this project aims to go beyond the traditional metrics for expressive 
 1. Prerequisites: Please install [torch](https://pytorch.org/) (only versions >=2.3 are supported officially)
 2. Install pereval:
 ```sh
-pip install pereval
+pip install -U pereval
 ```
 
 ## Repository structure:
 
 - `/pereval/` contains the main utilities (such as alignment, feature extraction, calculation of attribute-scoped and deep feature metrics) used in our research paper
-- `/scripts/` contains the scripts used to reproduce the experiments in the paper
 - `/examples/` contains the notebooks for data analysis and examples of usage
 
-**Scripts**
-- `run_save_alignment.py` - calculates the note alignment using Parangonar
-- `run_correlation.py` - calculates attribute-scoped correlations between sets of performances
-- `run_kde.py` - calculates Kernel Density Estimators for attribute-scoped KL-divergence
-- `run_embed_aria.py` - extracts Aria embeddings
-- `run_shift_notes.py` - shifts (truncates the first few) notes in performances
-- `run_permute_velocity.py` - transfers the velocities of the notes between performances
+**Command-line interface:**
+- `pereval_save_alignment` - calculates the note alignment using Parangonar
+- `pereval_correlation` - calculates attribute-scoped correlations between sets of performances
+- `pereval_kde` - calculates Kernel Density Estimators for attribute-scoped KL-divergence
+- `pereval_embed_aria` - extracts Aria embeddings
+- `pereval_shift_notes` - shifts (truncates the first few) notes in performances
+- `pereval_permute_velocity` - transfers the velocities of the notes between performances
 
 **Notebooks:**
 - `mahalanobis_pseudo_ratings.ipynb` - comparing Mahalanobis-based Aria pseudo-ratings with human MOS from the listening test 

@@ -83,7 +83,14 @@ def get_dataset_kde(eval_dir,
             'kde_duration': kde_duration}
 
 
-def main(args):
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
+    parser.add_argument('--score_dir', type=str, required=True, help='path to directory with scores')
+    parser.add_argument('--output_filename', type=str, required=True, help='filename of output correlation')
+
+    args = parser.parse_args()
+
     eval_dir = args.evaluation_dir
     score_dir = args.score_dir
     output_filename = args.output_filename
@@ -97,11 +104,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
-    parser.add_argument('--score_dir', type=str, required=True, help='path to directory with scores')
-    parser.add_argument('--output_filename', type=str, required=True, help='filename of output correlation')
-
-    args = parser.parse_args()
-
-    main(args)
+    main()

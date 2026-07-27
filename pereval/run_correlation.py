@@ -110,7 +110,19 @@ def get_dataset_correlation(real_dir: str,
             'duration': duration_corr_dict}
 
 
-def main(args):
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--real_dir', type=str, required=True, help='path to directory with real performances')
+    parser.add_argument('--gen_dir', type=str, required=True, help='path to directory with generated performances')
+    parser.add_argument('--real_alignment_dir', type=str, required=True, help='directory with alignments for real performances')
+    parser.add_argument('--gen_alignment_dir', type=str, required=True, help='directory with alignments for generated performances')
+    parser.add_argument('--score_dir', type=str, required=True, help='path to directory with scores')
+    parser.add_argument('--output_filename', type=str, required=True, help='filename of output correlation')
+    parser.add_argument('--left_percentage', type=float, required=False, default=None, help='left fraction of notes to use')
+    parser.add_argument('--right_percentage', type=float, required=False, default=None, help='right fraction of notes to use')
+
+    args = parser.parse_args()
+
     real_dir = args.real_dir
     gen_dir = args.gen_dir
     real_alignment_dir = args.real_alignment_dir
@@ -133,16 +145,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--real_dir', type=str, required=True, help='path to directory with real performances')
-    parser.add_argument('--gen_dir', type=str, required=True, help='path to directory with generated performances')
-    parser.add_argument('--real_alignment_dir', type=str, required=True, help='directory with alignments for real performances')
-    parser.add_argument('--gen_alignment_dir', type=str, required=True, help='directory with alignments for generated performances')
-    parser.add_argument('--score_dir', type=str, required=True, help='path to directory with scores')
-    parser.add_argument('--output_filename', type=str, required=True, help='filename of output correlation')
-    parser.add_argument('--left_percentage', type=float, required=False, default=None, help='left fraction of notes to use')
-    parser.add_argument('--right_percentage', type=float, required=False, default=None, help='right fraction of notes to use')
-
-    args = parser.parse_args()
-
-    main(args)
+    main()

@@ -11,11 +11,16 @@ warnings.filterwarnings('ignore')
 from pereval.alignment import TheGlueNoteMatcher
 
 
-def main(args):
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--score_dir', type=str, required=True, help='path to dir with scores')
+    parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
+
+    args = parser.parse_args()
+
     score_dir = args.score_dir
     evaluation_dir = args.evaluation_dir
 
-    #matcher = pa.TheGlueNoteMatcher()
     matcher = TheGlueNoteMatcher()
 
     for score_name in tqdm(os.listdir(evaluation_dir)):
@@ -47,10 +52,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--score_dir', type=str, required=True, help='path to dir with scores')
-    parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
-
-    args = parser.parse_args()
-
-    main(args)
+    main()

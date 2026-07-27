@@ -12,6 +12,7 @@ dependencies = [
     "torch (>=2.3)",
     "pandas (>=2.3.3)",
     "scipy (==1.16.0)",
+    "miditok (>=3.0.6.post1)",
     "parangonar (>=3.1.0)",
     "partitura (>=1.6.0)",
     "symusic (>=0.5.8)",
@@ -22,6 +23,13 @@ dependencies = [
     "python-dotenv (>=1.2.2,<2.0.0)"
 ]
 
+[project.scripts]
+pereval_embed_aria = "pereval.run_embed_aria:main"
+pereval_save_alignment = "pereval.run_save_alignment:main"
+pereval_correlation = "pereval.run_correlation:main"
+pereval_kde = "pereval.run_kde:main"
+pereval_permute_velocity = "pereval.run_permute_velocity:main"
+pereval_shift_notes = "pereval.run_shift_notes:main"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

@@ -10,9 +10,15 @@ from safetensors.torch import load_file
 from pereval.feature_extractor import get_aria_embeddings
 
 
-def main(args):
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--checkpoint_path', type=str, required=True, help='path to aria model checkpoint')
+    parser.add_argument('--evaluation_dir', type=str, required=True, help='path to the directory with performances')
+
+    args = parser.parse_args()
+
     checkpoint_path = args.checkpoint_path
-    output_dir = args.output_dir
+    evaluation_dir = args.evaluation_dir
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -23,21 +29,15 @@ def main(args):
     state_dict = load_file(filename=checkpoint_path)
     model.load_state_dict(state_dict=state_dict, strict=True)
 
-    emb_dict = get_aria_embeddings(output_dir,
+    emb_dict = get_aria_embeddings(evaluation_dir,
                                    model,
                                    device)
 
     output_filename = "aria_emb_fix.pt"
-    emb_path = os.path.join(output_dir, output_filename)
+    emb_path = os.path.join(evaluation_dir, output_filename)
     
     torch.save(emb_dict, emb_path)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--checkpoint_path', type=str, required=True, help='path to aria model checkpoint')
-    parser.add_argument('--output_dir', type=str, required=True, help='path to output dir')
-
-    args = parser.parse_args()
-
-    main(args)
+    main()
