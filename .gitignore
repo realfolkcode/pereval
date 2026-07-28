@@ -15,6 +15,7 @@ test_*.sh
 data/
 models/
 wandb/
+docs/
 #tokenizers/
 wip_notebooks/
 misc_scripts/
