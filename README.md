@@ -32,12 +32,12 @@ pip install -U pereval
 - `/examples/` contains the notebooks for data analysis and examples of usage
 
 **Command-line interface:**
-- `pereval_save_alignment` - calculates the note alignment using Parangonar
-- `pereval_correlation` - calculates attribute-scoped correlations between sets of performances
-- `pereval_kde` - calculates Kernel Density Estimators for attribute-scoped KL-divergence
-- `pereval_embed_aria` - extracts Aria embeddings
-- `pereval_shift_notes` - shifts (truncates the first few) notes in performances
-- `pereval_permute_velocity` - transfers the velocities of the notes between performances
+- `pereval-save-alignment` - calculates the note alignment using Parangonar
+- `pereval-correlation` - calculates attribute-scoped correlations between sets of performances
+- `pereval-kde` - calculates Kernel Density Estimators for attribute-scoped KL-divergence
+- `pereval-embed-aria` - extracts Aria embeddings
+- `pereval-shift-notes` - shifts (truncates the first few) notes in performances
+- `pereval-permute-velocity` - transfers the velocities of the notes between performances
 
 **Notebooks:**
 - `mahalanobis_pseudo_ratings.ipynb` - comparing Mahalanobis-based Aria pseudo-ratings with human MOS from the listening test 
