@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pereval.feature_extractor &mdash; Pereval 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Pereval
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Pereval</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pereval.feature_extractor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pereval.feature_extractor</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.embedding</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_global_embedding_from_midi</span><span class="p">,</span> \
+                           <span class="n">_validate_midi_for_emb</span><span class="p">,</span> <span class="n">_get_chunks</span><span class="p">,</span> \
+                           <span class="n">MAX_EMBEDDING_SEQ_LEN</span><span class="p">,</span> <span class="n">get_embedding_from_seq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ariautils.tokenizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbsTokenizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ariautils.midi</span><span class="w"> </span><span class="kn">import</span> <span class="n">MidiDict</span>
+
+
+<div class="viewcode-block" id="CLAMPExtractor">
+<a class="viewcode-back" href="../../pereval.html#pereval.feature_extractor.CLAMPExtractor">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CLAMPExtractor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Feature extractor for CLAMP3 model.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CLAMPExtractor.extract_features">
+<a class="viewcode-back" href="../../pereval.html#pereval.feature_extractor.CLAMPExtractor.extract_features">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                         <span class="n">emb_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts features from a directory.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            emb_dir: The directory where embeddings are stored.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Embeddings of shape (N, D), a list of score names,</span>
+<span class="sd">            and a list of performance names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">emb_lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">score_lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">perf_lst</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">score_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">emb_dir</span><span class="p">):</span>
+            <span class="n">score_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">emb_dir</span><span class="p">,</span> <span class="n">score_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">score_dir</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">emb_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">score_dir</span><span class="p">):</span>
+                <span class="n">emb_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">score_dir</span><span class="p">,</span> <span class="n">emb_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">emb_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.npy&#39;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                
+                <span class="n">emb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">emb_path</span><span class="p">)</span>
+                <span class="n">emb_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">emb</span><span class="p">)</span>
+
+                <span class="n">perf_name</span> <span class="o">=</span> <span class="n">emb_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">perf_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">perf_name</span><span class="si">}</span><span class="s2">.mid&quot;</span>
+
+                <span class="n">score_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score_name</span><span class="p">)</span>
+                <span class="n">perf_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">perf_name</span><span class="p">)</span>
+            
+        <span class="n">embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">emb_lst</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">embeddings</span><span class="p">,</span> <span class="n">score_lst</span><span class="p">,</span> <span class="n">perf_lst</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FeatureExtractor">
+<a class="viewcode-back" href="../../pereval.html#pereval.feature_extractor.FeatureExtractor">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FeatureExtractor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Feature extractor for Aria model.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FeatureExtractor.extract_features">
+<a class="viewcode-back" href="../../pereval.html#pereval.feature_extractor.FeatureExtractor.extract_features">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                         <span class="n">emb_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts features from a .pt file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            emb_path: The path to embeddings file.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Embeddings of shape (N, D), a list of score names,</span>
+<span class="sd">            and a list of performance names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">embeddings</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">emb_path</span><span class="p">)</span>
+
+        <span class="n">emb_lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">score_lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">perf_lst</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">score</span><span class="p">,</span> <span class="n">perf_dict</span> <span class="ow">in</span> <span class="n">embeddings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">score_lst</span> <span class="o">+=</span> <span class="p">[</span><span class="n">score</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">perf_dict</span><span class="p">)</span>
+            <span class="n">perf_lst</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">perf_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">emb_lst</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">perf_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="n">embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">emb_lst</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">embeddings</span><span class="p">,</span> <span class="n">score_lst</span><span class="p">,</span> <span class="n">perf_lst</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="get_aria_embeddings">
+<a class="viewcode-back" href="../../pereval.html#pereval.feature_extractor.get_aria_embeddings">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_aria_embeddings</span><span class="p">(</span><span class="n">evaluation_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+                        <span class="n">device</span><span class="p">,</span>
+                        <span class="n">is_first</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs Aria embeddings for performances.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        evaluation_dir: A directory with performances.</span>
+<span class="sd">        model: Aria model.</span>
+<span class="sd">        device: Device.</span>
+<span class="sd">        is_first: If True, computes embeddings only for the first chunk of a MIDI.</span>
+
+<span class="sd">    Return:</span>
+<span class="sd">        A dictionary with score names as keys.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">emb_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">score_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">evaluation_dir</span><span class="p">))):</span>
+        <span class="n">score_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">evaluation_dir</span><span class="p">,</span> <span class="n">score_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">score_dir</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="n">emb_dict</span><span class="p">[</span><span class="n">score_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">perf_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">score_dir</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">perf_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.mid&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">perf_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.midi&quot;</span><span class="p">):</span>
+                <span class="n">perf_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">score_dir</span><span class="p">,</span> <span class="n">perf_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">is_first</span><span class="p">:</span>
+                    <span class="n">emb</span> <span class="o">=</span> <span class="n">get_global_embedding_from_midi</span><span class="p">(</span>
+                        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                        <span class="n">midi_path</span><span class="o">=</span><span class="n">perf_path</span><span class="p">,</span>
+                        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">emb</span> <span class="o">=</span> <span class="n">get_first_embedding_from_midi</span><span class="p">(</span>
+                        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                        <span class="n">midi_path</span><span class="o">=</span><span class="n">perf_path</span><span class="p">,</span>
+                        <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+                    <span class="p">)</span>
+                <span class="n">emb_dict</span><span class="p">[</span><span class="n">score_name</span><span class="p">][</span><span class="n">perf_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">emb</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">emb_dict</span></div>
+
+
+
+<div class="viewcode-block" id="create_aria_seq_mask">
+<a class="viewcode-back" href="../../pereval.html#pereval.feature_extractor.create_aria_seq_mask">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_aria_seq_mask</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a mask for Aria token sequence.</span>
+
+<span class="sd">    (Experimental; not used in the paper)</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        seq: Sequence.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        A mask of shape (num_tokens,).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">))</span><span class="o">.</span><span class="n">bool</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;piano&#39;</span><span class="p">:</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;onset&#39;</span><span class="p">:</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;dur&#39;</span><span class="p">:</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">mask</span></div>
+
+
+
+<div class="viewcode-block" id="get_full_embedding_from_midi">
+<a class="viewcode-back" href="../../pereval.html#pereval.feature_extractor.get_full_embedding_from_midi">[docs]</a>
+<span class="nd">@torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">()</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_full_embedding_from_midi</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+                                 <span class="n">midi_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                 <span class="n">notes_per_chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+                                 <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span><span class="p">,</span>
+                                 <span class="n">is_contrastive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates a full MIDI embedding with Aria.</span>
+
+<span class="sd">    (Experimental; not used in the paper)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: Aria model.</span>
+<span class="sd">        midi_path: The path to a MIDI file.</span>
+<span class="sd">        notes_per_chunk: The number of notes per chunk.</span>
+<span class="sd">        device: Device.</span>
+<span class="sd">        is_contrastive: If True, uses the contrastive embedding head.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Embedding of shape (3 * num_notes, dim).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">midi_dict</span> <span class="o">=</span> <span class="n">MidiDict</span><span class="o">.</span><span class="n">from_midi</span><span class="p">(</span><span class="n">mid_path</span><span class="o">=</span><span class="n">midi_path</span><span class="p">)</span>
+
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AbsTokenizer</span><span class="p">()</span>
+    <span class="n">_validate_midi_for_emb</span><span class="p">(</span><span class="n">midi_dict</span><span class="p">)</span>
+
+    <span class="n">chunks</span> <span class="o">=</span> <span class="n">_get_chunks</span><span class="p">(</span><span class="n">midi_dict</span><span class="o">=</span><span class="n">midi_dict</span><span class="p">,</span> <span class="n">notes_per_chunk</span><span class="o">=</span><span class="n">notes_per_chunk</span><span class="p">)</span>
+    <span class="n">seqs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">tokenizer</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">add_dim_tok</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:</span><span class="n">MAX_EMBEDDING_SEQ_LEN</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Add back eos_tok if truncated by MAX_EMBEDDING_SEQ_LEN</span>
+    <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">seqs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">seq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_tok</span><span class="p">:</span>
+            <span class="n">seq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_tok</span>
+    
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="n">emb_lst</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">seqs</span><span class="p">:</span>
+        <span class="n">seq_enc</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">seq</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">seq_mask</span> <span class="o">=</span> <span class="n">create_aria_seq_mask</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_contrastive</span><span class="p">:</span>
+            <span class="n">emb</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">seq_enc</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">emb</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">seq_enc</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">emb</span><span class="p">[:,</span> <span class="n">seq_mask</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">assert</span> <span class="n">emb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">notes_per_chunk</span>
+        
+        <span class="n">emb_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">emb</span><span class="p">)</span>
+    
+    <span class="n">emb</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">emb_lst</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">emb</span></div>
+
+
+
+<div class="viewcode-block" id="get_first_embedding_from_midi">
+<a class="viewcode-back" href="../../pereval.html#pereval.feature_extractor.get_first_embedding_from_midi">[docs]</a>
+<span class="nd">@torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">()</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_first_embedding_from_midi</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+                                  <span class="n">midi_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                  <span class="n">notes_per_chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+                                  <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates MIDI embedding for the first chunk with Aria.</span>
+
+<span class="sd">    (Experimental; not used in the paper)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: Aria model.</span>
+<span class="sd">        midi_path: The path to a MIDI file.</span>
+<span class="sd">        notes_per_chunk: The number of notes per chunk.</span>
+<span class="sd">        device: Device.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Embedding of shape (dim,).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">midi_dict</span> <span class="o">=</span> <span class="n">MidiDict</span><span class="o">.</span><span class="n">from_midi</span><span class="p">(</span><span class="n">mid_path</span><span class="o">=</span><span class="n">midi_path</span><span class="p">)</span>
+
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AbsTokenizer</span><span class="p">()</span>
+    <span class="n">_validate_midi_for_emb</span><span class="p">(</span><span class="n">midi_dict</span><span class="p">)</span>
+
+    <span class="n">chunks</span> <span class="o">=</span> <span class="n">_get_chunks</span><span class="p">(</span><span class="n">midi_dict</span><span class="o">=</span><span class="n">midi_dict</span><span class="p">,</span> <span class="n">notes_per_chunk</span><span class="o">=</span><span class="n">notes_per_chunk</span><span class="p">)</span>
+    <span class="n">seqs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">tokenizer</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">add_dim_tok</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:</span><span class="n">MAX_EMBEDDING_SEQ_LEN</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span>
+    <span class="p">]</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="n">seqs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Add back eos_tok if truncated by MAX_EMBEDDING_SEQ_LEN</span>
+    <span class="k">if</span> <span class="n">seq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_tok</span><span class="p">:</span>
+        <span class="n">seq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_tok</span>
+    
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="n">emb</span> <span class="o">=</span> <span class="n">get_embedding_from_seq</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="n">seq</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">emb</span> <span class="o">=</span> <span class="n">emb</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">emb</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Dmitrii Gavrilev.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

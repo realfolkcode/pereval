@@ -1,0 +1,816 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pereval package &mdash; Pereval 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Pereval
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">pereval package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-pereval.alignment">pereval.alignment module</a><ul>
+<li><a class="reference internal" href="#pereval.alignment.NoteAligner"><code class="docutils literal notranslate"><span class="pre">NoteAligner</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.alignment.NoteAligner.get_onset_indices"><code class="docutils literal notranslate"><span class="pre">NoteAligner.get_onset_indices()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.alignment.NoteAligner.load_score_perf_alignment"><code class="docutils literal notranslate"><span class="pre">NoteAligner.load_score_perf_alignment()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pereval.alignment.TheGlueNoteMatcher"><code class="docutils literal notranslate"><span class="pre">TheGlueNoteMatcher</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.alignment.TheGlueNoteMatcher.get_dtw_alignment_from_model"><code class="docutils literal notranslate"><span class="pre">TheGlueNoteMatcher.get_dtw_alignment_from_model()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.alignment.TheGlueNoteMatcher.match_midi"><code class="docutils literal notranslate"><span class="pre">TheGlueNoteMatcher.match_midi()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.alignment.TheGlueNoteMatcher.prepare_model"><code class="docutils literal notranslate"><span class="pre">TheGlueNoteMatcher.prepare_model()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.alignment.TheGlueNoteMatcher.run_model_inference"><code class="docutils literal notranslate"><span class="pre">TheGlueNoteMatcher.run_model_inference()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.correlation">pereval.correlation module</a><ul>
+<li><a class="reference internal" href="#pereval.correlation.aggregate"><code class="docutils literal notranslate"><span class="pre">aggregate()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.correlation.calculate_correlation"><code class="docutils literal notranslate"><span class="pre">calculate_correlation()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.feature_extractor">pereval.feature_extractor module</a><ul>
+<li><a class="reference internal" href="#pereval.feature_extractor.CLAMPExtractor"><code class="docutils literal notranslate"><span class="pre">CLAMPExtractor</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.feature_extractor.CLAMPExtractor.extract_features"><code class="docutils literal notranslate"><span class="pre">CLAMPExtractor.extract_features()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pereval.feature_extractor.FeatureExtractor"><code class="docutils literal notranslate"><span class="pre">FeatureExtractor</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.feature_extractor.FeatureExtractor.extract_features"><code class="docutils literal notranslate"><span class="pre">FeatureExtractor.extract_features()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pereval.feature_extractor.create_aria_seq_mask"><code class="docutils literal notranslate"><span class="pre">create_aria_seq_mask()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.feature_extractor.get_aria_embeddings"><code class="docutils literal notranslate"><span class="pre">get_aria_embeddings()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.feature_extractor.get_first_embedding_from_midi"><code class="docutils literal notranslate"><span class="pre">get_first_embedding_from_midi()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.feature_extractor.get_full_embedding_from_midi"><code class="docutils literal notranslate"><span class="pre">get_full_embedding_from_midi()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.fmd">pereval.fmd module</a><ul>
+<li><a class="reference internal" href="#pereval.fmd.ConditionalFMD"><code class="docutils literal notranslate"><span class="pre">ConditionalFMD</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.fmd.ConditionalFMD.compute_cfmd"><code class="docutils literal notranslate"><span class="pre">ConditionalFMD.compute_cfmd()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pereval.fmd.FrechetMusicDistance"><code class="docutils literal notranslate"><span class="pre">FrechetMusicDistance</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.fmd.FrechetMusicDistance.compute_fmd"><code class="docutils literal notranslate"><span class="pre">FrechetMusicDistance.compute_fmd()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.kmd">pereval.kmd module</a><ul>
+<li><a class="reference internal" href="#pereval.kmd.KernelMusicDistance"><code class="docutils literal notranslate"><span class="pre">KernelMusicDistance</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.kmd.KernelMusicDistance.calculate_bandwidth"><code class="docutils literal notranslate"><span class="pre">KernelMusicDistance.calculate_bandwidth()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.kmd.KernelMusicDistance.compute_kmd"><code class="docutils literal notranslate"><span class="pre">KernelMusicDistance.compute_kmd()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pereval.kmd.KernelPerformanceDistance"><code class="docutils literal notranslate"><span class="pre">KernelPerformanceDistance</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.kmd.KernelPerformanceDistance.calculate_bandwidth"><code class="docutils literal notranslate"><span class="pre">KernelPerformanceDistance.calculate_bandwidth()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.kmd.KernelPerformanceDistance.compute_kmd"><code class="docutils literal notranslate"><span class="pre">KernelPerformanceDistance.compute_kmd()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.kmd.KernelPerformanceDistance.compute_kpd"><code class="docutils literal notranslate"><span class="pre">KernelPerformanceDistance.compute_kpd()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pereval.kmd.median_pairwise_distance"><code class="docutils literal notranslate"><span class="pre">median_pairwise_distance()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.pseudo_rating">pereval.pseudo_rating module</a><ul>
+<li><a class="reference internal" href="#pereval.pseudo_rating.MahalanobisRating"><code class="docutils literal notranslate"><span class="pre">MahalanobisRating</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.pseudo_rating.MahalanobisRating.fit_precision"><code class="docutils literal notranslate"><span class="pre">MahalanobisRating.fit_precision()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.pseudo_rating.MahalanobisRating.predict"><code class="docutils literal notranslate"><span class="pre">MahalanobisRating.predict()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pereval.pseudo_rating.MarginalMahalanobisRating"><code class="docutils literal notranslate"><span class="pre">MarginalMahalanobisRating</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.pseudo_rating.MarginalMahalanobisRating.fit_precision"><code class="docutils literal notranslate"><span class="pre">MarginalMahalanobisRating.fit_precision()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.pseudo_rating.MarginalMahalanobisRating.predict"><code class="docutils literal notranslate"><span class="pre">MarginalMahalanobisRating.predict()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pereval.pseudo_rating.RelativeMahalanobisRating"><code class="docutils literal notranslate"><span class="pre">RelativeMahalanobisRating</span></code></a><ul>
+<li><a class="reference internal" href="#pereval.pseudo_rating.RelativeMahalanobisRating.fit_precision"><code class="docutils literal notranslate"><span class="pre">RelativeMahalanobisRating.fit_precision()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.pseudo_rating.RelativeMahalanobisRating.predict"><code class="docutils literal notranslate"><span class="pre">RelativeMahalanobisRating.predict()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pereval.pseudo_rating.estimate_score_precision"><code class="docutils literal notranslate"><span class="pre">estimate_score_precision()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.run_correlation">pereval.run_correlation module</a><ul>
+<li><a class="reference internal" href="#pereval.run_correlation.get_dataset_correlation"><code class="docutils literal notranslate"><span class="pre">get_dataset_correlation()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.run_correlation.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.run_embed_aria">pereval.run_embed_aria module</a><ul>
+<li><a class="reference internal" href="#pereval.run_embed_aria.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.run_kde">pereval.run_kde module</a><ul>
+<li><a class="reference internal" href="#pereval.run_kde.extract_features"><code class="docutils literal notranslate"><span class="pre">extract_features()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.run_kde.get_dataset_kde"><code class="docutils literal notranslate"><span class="pre">get_dataset_kde()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.run_kde.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.run_permute_velocity">pereval.run_permute_velocity module</a><ul>
+<li><a class="reference internal" href="#pereval.run_permute_velocity.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.run_save_alignment">pereval.run_save_alignment module</a><ul>
+<li><a class="reference internal" href="#pereval.run_save_alignment.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.run_shift_notes">pereval.run_shift_notes module</a><ul>
+<li><a class="reference internal" href="#pereval.run_shift_notes.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval.utils">pereval.utils module</a><ul>
+<li><a class="reference internal" href="#pereval.utils.calculate_ci"><code class="docutils literal notranslate"><span class="pre">calculate_ci()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pereval">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Pereval</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pereval package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pereval.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pereval-package">
+<h1>pereval package<a class="headerlink" href="#pereval-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pereval.alignment">
+<span id="pereval-alignment-module"></span><h2>pereval.alignment module<a class="headerlink" href="#module-pereval.alignment" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.alignment.NoteAligner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.alignment.</span></span><span class="sig-name descname"><span class="pre">NoteAligner</span></span><a class="reference internal" href="_modules/pereval/alignment.html#NoteAligner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.alignment.NoteAligner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.alignment.NoteAligner.get_onset_indices">
+<span class="sig-name descname"><span class="pre">get_onset_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/alignment.html#NoteAligner.get_onset_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.alignment.NoteAligner.get_onset_indices" title="Link to this definition"></a></dt>
+<dd><p>Retrieves onset indices from score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>score</strong> – Score note array.</p></li>
+<li><p><strong>indices</strong> – A subset of score note indices.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of onset note indices grouped together.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.alignment.NoteAligner.load_score_perf_alignment">
+<span class="sig-name descname"><span class="pre">load_score_perf_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alignment_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/alignment.html#NoteAligner.load_score_perf_alignment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.alignment.NoteAligner.load_score_perf_alignment" title="Link to this definition"></a></dt>
+<dd><p>Loads alignment between score and performance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alignment_path</strong> – The path to .match file.</p></li>
+<li><p><strong>perf</strong> – Performance note array.</p></li>
+<li><p><strong>score</strong> – Score note array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array with score indices in the first row,
+and performance indices in the second row.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.alignment.TheGlueNoteMatcher">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.alignment.</span></span><span class="sig-name descname"><span class="pre">TheGlueNoteMatcher</span></span><a class="reference internal" href="_modules/pereval/alignment.html#TheGlueNoteMatcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.alignment.TheGlueNoteMatcher" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.alignment.TheGlueNoteMatcher.get_dtw_alignment_from_model">
+<span class="sig-name descname"><span class="pre">get_dtw_alignment_from_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoder_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_midi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_midi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unmatched_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100000000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/alignment.html#TheGlueNoteMatcher.get_dtw_alignment_from_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.alignment.TheGlueNoteMatcher.get_dtw_alignment_from_model" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.alignment.TheGlueNoteMatcher.match_midi">
+<span class="sig-name descname"><span class="pre">match_midi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">midi_path_0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">midi_path_1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/alignment.html#TheGlueNoteMatcher.match_midi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.alignment.TheGlueNoteMatcher.match_midi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.alignment.TheGlueNoteMatcher.prepare_model">
+<span class="sig-name descname"><span class="pre">prepare_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/alignment.html#TheGlueNoteMatcher.prepare_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.alignment.TheGlueNoteMatcher.prepare_model" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.alignment.TheGlueNoteMatcher.run_model_inference">
+<span class="sig-name descname"><span class="pre">run_model_inference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">performance_midi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_midi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_note_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_note_array_full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_formatted_alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/alignment.html#TheGlueNoteMatcher.run_model_inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.alignment.TheGlueNoteMatcher.run_model_inference" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pereval.correlation">
+<span id="pereval-correlation-module"></span><h2>pereval.correlation module<a class="headerlink" href="#module-pereval.correlation" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.correlation.aggregate">
+<span class="sig-prename descclassname"><span class="pre">pereval.correlation.</span></span><span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices_lst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/correlation.html#aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.correlation.aggregate" title="Link to this definition"></a></dt>
+<dd><p>Aggregates means of an array grouped by indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>indices_lst</strong></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.correlation.calculate_correlation">
+<span class="sig-prename descclassname"><span class="pre">pereval.correlation.</span></span><span class="sig-name descname"><span class="pre">calculate_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_perf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_perf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_score_perf_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_score_perf_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">note_aligner</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right_percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/correlation.html#calculate_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.correlation.calculate_correlation" title="Link to this definition"></a></dt>
+<dd><p>Calculates correlation between two performances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>real_perf</strong> – Real performance.</p></li>
+<li><p><strong>gen_perf</strong> – Generated performance</p></li>
+<li><p><strong>real_score_perf_indices</strong> – Score-to-performance alignment
+for real performance.</p></li>
+<li><p><strong>gen_score_perf_indices</strong> – Score-to-performance alignment
+for generated performance.</p></li>
+<li><p><strong>note_aligner</strong> – Note aligner.</p></li>
+<li><p><strong>left_percentage</strong> – The left fraction of notes from 0 to 1.</p></li>
+<li><p><strong>right_percentage</strong> – The right fraction of notes from 0 to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with attribute correlations.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pereval.feature_extractor">
+<span id="pereval-feature-extractor-module"></span><h2>pereval.feature_extractor module<a class="headerlink" href="#module-pereval.feature_extractor" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.feature_extractor.CLAMPExtractor">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.feature_extractor.</span></span><span class="sig-name descname"><span class="pre">CLAMPExtractor</span></span><a class="reference internal" href="_modules/pereval/feature_extractor.html#CLAMPExtractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.feature_extractor.CLAMPExtractor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Feature extractor for CLAMP3 model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.feature_extractor.CLAMPExtractor.extract_features">
+<span class="sig-name descname"><span class="pre">extract_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emb_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/feature_extractor.html#CLAMPExtractor.extract_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.feature_extractor.CLAMPExtractor.extract_features" title="Link to this definition"></a></dt>
+<dd><p>Extracts features from a directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>emb_dir</strong> – The directory where embeddings are stored.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Embeddings of shape (N, D), a list of score names,
+and a list of performance names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.feature_extractor.FeatureExtractor">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.feature_extractor.</span></span><span class="sig-name descname"><span class="pre">FeatureExtractor</span></span><a class="reference internal" href="_modules/pereval/feature_extractor.html#FeatureExtractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.feature_extractor.FeatureExtractor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Feature extractor for Aria model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.feature_extractor.FeatureExtractor.extract_features">
+<span class="sig-name descname"><span class="pre">extract_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emb_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/feature_extractor.html#FeatureExtractor.extract_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.feature_extractor.FeatureExtractor.extract_features" title="Link to this definition"></a></dt>
+<dd><p>Extracts features from a .pt file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>emb_path</strong> – The path to embeddings file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Embeddings of shape (N, D), a list of score names,
+and a list of performance names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.feature_extractor.create_aria_seq_mask">
+<span class="sig-prename descclassname"><span class="pre">pereval.feature_extractor.</span></span><span class="sig-name descname"><span class="pre">create_aria_seq_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tensor</span></span></span><a class="reference internal" href="_modules/pereval/feature_extractor.html#create_aria_seq_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.feature_extractor.create_aria_seq_mask" title="Link to this definition"></a></dt>
+<dd><p>Creates a mask for Aria token sequence.</p>
+<p>(Experimental; not used in the paper)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>seq</strong> – Sequence.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A mask of shape (num_tokens,).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.feature_extractor.get_aria_embeddings">
+<span class="sig-prename descclassname"><span class="pre">pereval.feature_extractor.</span></span><span class="sig-name descname"><span class="pre">get_aria_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evaluation_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_first</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/pereval/feature_extractor.html#get_aria_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.feature_extractor.get_aria_embeddings" title="Link to this definition"></a></dt>
+<dd><p>Constructs Aria embeddings for performances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>evaluation_dir</strong> – A directory with performances.</p></li>
+<li><p><strong>model</strong> – Aria model.</p></li>
+<li><p><strong>device</strong> – Device.</p></li>
+<li><p><strong>is_first</strong> – If True, computes embeddings only for the first chunk of a MIDI.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with score names as keys.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.feature_extractor.get_first_embedding_from_midi">
+<span class="sig-prename descclassname"><span class="pre">pereval.feature_extractor.</span></span><span class="sig-name descname"><span class="pre">get_first_embedding_from_midi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">midi_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes_per_chunk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cuda'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tensor</span></span></span><a class="reference internal" href="_modules/pereval/feature_extractor.html#get_first_embedding_from_midi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.feature_extractor.get_first_embedding_from_midi" title="Link to this definition"></a></dt>
+<dd><p>Calculates MIDI embedding for the first chunk with Aria.</p>
+<p>(Experimental; not used in the paper)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – Aria model.</p></li>
+<li><p><strong>midi_path</strong> – The path to a MIDI file.</p></li>
+<li><p><strong>notes_per_chunk</strong> – The number of notes per chunk.</p></li>
+<li><p><strong>device</strong> – Device.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Embedding of shape (dim,).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.feature_extractor.get_full_embedding_from_midi">
+<span class="sig-prename descclassname"><span class="pre">pereval.feature_extractor.</span></span><span class="sig-name descname"><span class="pre">get_full_embedding_from_midi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">midi_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes_per_chunk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cuda'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_contrastive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tensor</span></span></span><a class="reference internal" href="_modules/pereval/feature_extractor.html#get_full_embedding_from_midi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.feature_extractor.get_full_embedding_from_midi" title="Link to this definition"></a></dt>
+<dd><p>Calculates a full MIDI embedding with Aria.</p>
+<p>(Experimental; not used in the paper)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – Aria model.</p></li>
+<li><p><strong>midi_path</strong> – The path to a MIDI file.</p></li>
+<li><p><strong>notes_per_chunk</strong> – The number of notes per chunk.</p></li>
+<li><p><strong>device</strong> – Device.</p></li>
+<li><p><strong>is_contrastive</strong> – If True, uses the contrastive embedding head.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Embedding of shape (3 * num_notes, dim).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pereval.fmd">
+<span id="pereval-fmd-module"></span><h2>pereval.fmd module<a class="headerlink" href="#module-pereval.fmd" title="Link to this heading"></a></h2>
+<p>Code is adapted from: <a class="reference external" href="https://github.com/microsoft/fadtk">https://github.com/microsoft/fadtk</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.fmd.ConditionalFMD">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.fmd.</span></span><span class="sig-name descname"><span class="pre">ConditionalFMD</span></span><a class="reference internal" href="_modules/pereval/fmd.html#ConditionalFMD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.fmd.ConditionalFMD" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.fmd.ConditionalFMD.compute_cfmd">
+<span class="sig-name descname"><span class="pre">compute_cfmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_lst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_cov</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pereval/fmd.html#ConditionalFMD.compute_cfmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.fmd.ConditionalFMD.compute_cfmd" title="Link to this definition"></a></dt>
+<dd><p>Computes Frechet Music Distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ref_emb</strong> – Reference embeddings of shape (N, D).</p></li>
+<li><p><strong>test_emb</strong> – Test embeddings of shape (N, D).</p></li>
+<li><p><strong>label_lst</strong> – List of score names for each embedding.</p></li>
+<li><p><strong>calculate_cov</strong> – By default calculates the second moment differences.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Frechet Music Distance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.fmd.FrechetMusicDistance">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.fmd.</span></span><span class="sig-name descname"><span class="pre">FrechetMusicDistance</span></span><a class="reference internal" href="_modules/pereval/fmd.html#FrechetMusicDistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.fmd.FrechetMusicDistance" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.fmd.FrechetMusicDistance.compute_fmd">
+<span class="sig-name descname"><span class="pre">compute_fmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pereval/fmd.html#FrechetMusicDistance.compute_fmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.fmd.FrechetMusicDistance.compute_fmd" title="Link to this definition"></a></dt>
+<dd><p>Computes Frechet Music Distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ref_emb</strong> – Reference embeddings of shape (N, D).</p></li>
+<li><p><strong>test_emb</strong> – Test embeddings of shape (M, D).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Frechet Music Distance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pereval.kmd">
+<span id="pereval-kmd-module"></span><h2>pereval.kmd module<a class="headerlink" href="#module-pereval.kmd" title="Link to this heading"></a></h2>
+<p>Code is adapted from: <a class="reference external" href="https://github.com/YoonjinXD/kadtk">https://github.com/YoonjinXD/kadtk</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.kmd.KernelMusicDistance">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.kmd.</span></span><span class="sig-name descname"><span class="pre">KernelMusicDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/kmd.html#KernelMusicDistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.kmd.KernelMusicDistance" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.kmd.KernelMusicDistance.calculate_bandwidth">
+<span class="sig-name descname"><span class="pre">calculate_bandwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.float32</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pereval/kmd.html#KernelMusicDistance.calculate_bandwidth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.kmd.KernelMusicDistance.calculate_bandwidth" title="Link to this definition"></a></dt>
+<dd><p>Calculates the kernel bandwidth.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ref_emb</strong> – The set of reference embeddings.</p></li>
+<li><p><strong>precision</strong> – Type setting for matrix calculation precision.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.kmd.KernelMusicDistance.compute_kmd">
+<span class="sig-name descname"><span class="pre">compute_kmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.float32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/pereval/kmd.html#KernelMusicDistance.compute_kmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.kmd.KernelMusicDistance.compute_kmd" title="Link to this definition"></a></dt>
+<dd><p>Compute the Kernel Music Distance (KMD) between two samples using PyTorch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – The set of model embeddings of shape (m, embedding_dim).</p></li>
+<li><p><strong>y</strong> – The set of reference embeddings of shape (n, embedding_dim).</p></li>
+<li><p><strong>bandwidth</strong> – The bandwidth value for the Gaussian RBF kernel.</p></li>
+<li><p><strong>precision</strong> – Type setting for matrix calculation precision.</p></li>
+<li><p><strong>eps</strong> – Small value to prevent division by zero.</p></li>
+<li><p><strong>return_components</strong> – If True, returns mean components.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The KMD between x and y embedding sets.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.kmd.KernelPerformanceDistance">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.kmd.</span></span><span class="sig-name descname"><span class="pre">KernelPerformanceDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/kmd.html#KernelPerformanceDistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.kmd.KernelPerformanceDistance" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.kmd.KernelPerformanceDistance.calculate_bandwidth">
+<span class="sig-name descname"><span class="pre">calculate_bandwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_lst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.float32</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pereval/kmd.html#KernelPerformanceDistance.calculate_bandwidth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.kmd.KernelPerformanceDistance.calculate_bandwidth" title="Link to this definition"></a></dt>
+<dd><p>Calculates the kernel bandwidth.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ref_emb</strong> – The set of reference embeddings.</p></li>
+<li><p><strong>label_lst</strong> – The list of labels.</p></li>
+<li><p><strong>precision</strong> – Type setting for matrix calculation precision.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.kmd.KernelPerformanceDistance.compute_kmd">
+<span class="sig-name descname"><span class="pre">compute_kmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/kmd.html#KernelPerformanceDistance.compute_kmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.kmd.KernelPerformanceDistance.compute_kmd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.kmd.KernelPerformanceDistance.compute_kpd">
+<span class="sig-name descname"><span class="pre">compute_kpd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label_lst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label_lst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.float32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/kmd.html#KernelPerformanceDistance.compute_kpd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.kmd.KernelPerformanceDistance.compute_kpd" title="Link to this definition"></a></dt>
+<dd><p>Compute the Kernel Performance Distance (KPD) between two samples using PyTorch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – The set of model embeddings of shape (m, embedding_dim).</p></li>
+<li><p><strong>y</strong> – The set of reference embeddings of shape (n, embedding_dim).</p></li>
+<li><p><strong>x_label_lst</strong> – The list of labels for x.</p></li>
+<li><p><strong>y_label_lst</strong> – The list of labels for y.</p></li>
+<li><p><strong>bandwidth</strong> – The bandwidth value for the Gaussian RBF kernel.</p></li>
+<li><p><strong>precision</strong> – Type setting for matrix calculation precision.</p></li>
+<li><p><strong>eps</strong> – Small value to prevent division by zero.</p></li>
+<li><p><strong>return_components</strong> – If True, returns mean components.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The KPD between x and y embedding sets.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.kmd.median_pairwise_distance">
+<span class="sig-prename descclassname"><span class="pre">pereval.kmd.</span></span><span class="sig-name descname"><span class="pre">median_pairwise_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/kmd.html#median_pairwise_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.kmd.median_pairwise_distance" title="Link to this definition"></a></dt>
+<dd><p>Compute the median pairwise distance of an embedding set.</p>
+<p>Args:
+x: torch.Tensor of shape (n_samples, embedding_dim)
+subsample: int, number of random pairs to consider (optional)</p>
+<p>Returns:
+The median pairwise distance between points in x.</p>
+</dd></dl>
+
+</section>
+<section id="module-pereval.pseudo_rating">
+<span id="pereval-pseudo-rating-module"></span><h2>pereval.pseudo_rating module<a class="headerlink" href="#module-pereval.pseudo_rating" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.pseudo_rating.MahalanobisRating">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.pseudo_rating.</span></span><span class="sig-name descname"><span class="pre">MahalanobisRating</span></span><a class="reference internal" href="_modules/pereval/pseudo_rating.html#MahalanobisRating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.pseudo_rating.MahalanobisRating" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Pseudo-rating based on Mahalanobis distance.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.pseudo_rating.MahalanobisRating.fit_precision">
+<span class="sig-name descname"><span class="pre">fit_precision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_lst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/pseudo_rating.html#MahalanobisRating.fit_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.pseudo_rating.MahalanobisRating.fit_precision" title="Link to this definition"></a></dt>
+<dd><p>Fits score-conditional precision matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cov_emb</strong> – The embeddings of shape (N, D).</p></li>
+<li><p><strong>score_lst</strong> – The names of the pieces for each embedding.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.pseudo_rating.MahalanobisRating.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/pseudo_rating.html#MahalanobisRating.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.pseudo_rating.MahalanobisRating.predict" title="Link to this definition"></a></dt>
+<dd><p>Predicts a pseudo-rating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emb</strong> – The embeddings of shape (N, D) for which the ratings should
+be predicted.</p></li>
+<li><p><strong>ref_emb</strong> – The reference embeddings.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of ratings of shape (N,).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.pseudo_rating.MarginalMahalanobisRating">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.pseudo_rating.</span></span><span class="sig-name descname"><span class="pre">MarginalMahalanobisRating</span></span><a class="reference internal" href="_modules/pereval/pseudo_rating.html#MarginalMahalanobisRating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.pseudo_rating.MarginalMahalanobisRating" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Pseudo-rating based on Marginal Mahalanobis distance.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.pseudo_rating.MarginalMahalanobisRating.fit_precision">
+<span class="sig-name descname"><span class="pre">fit_precision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/pseudo_rating.html#MarginalMahalanobisRating.fit_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.pseudo_rating.MarginalMahalanobisRating.fit_precision" title="Link to this definition"></a></dt>
+<dd><p>Fits marginal precision matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cov_emb</strong> – The embeddings of shape (N, D).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.pseudo_rating.MarginalMahalanobisRating.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/pseudo_rating.html#MarginalMahalanobisRating.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.pseudo_rating.MarginalMahalanobisRating.predict" title="Link to this definition"></a></dt>
+<dd><p>Predicts a pseudo-rating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>emb</strong> – The embeddings of shape (N, D) for which the ratings should
+be predicted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of ratings of shape (N,).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pereval.pseudo_rating.RelativeMahalanobisRating">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pereval.pseudo_rating.</span></span><span class="sig-name descname"><span class="pre">RelativeMahalanobisRating</span></span><a class="reference internal" href="_modules/pereval/pseudo_rating.html#RelativeMahalanobisRating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.pseudo_rating.RelativeMahalanobisRating" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Pseudo-rating based on Relative Mahalanobis distance.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.pseudo_rating.RelativeMahalanobisRating.fit_precision">
+<span class="sig-name descname"><span class="pre">fit_precision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_lst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/pseudo_rating.html#RelativeMahalanobisRating.fit_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.pseudo_rating.RelativeMahalanobisRating.fit_precision" title="Link to this definition"></a></dt>
+<dd><p>Fits score-conditional precision matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cov_emb</strong> – The embeddings of shape (N, D).</p></li>
+<li><p><strong>score_lst</strong> – The names of the pieces for each embedding.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pereval.pseudo_rating.RelativeMahalanobisRating.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/pseudo_rating.html#RelativeMahalanobisRating.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.pseudo_rating.RelativeMahalanobisRating.predict" title="Link to this definition"></a></dt>
+<dd><p>Predicts a pseudo-rating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emb</strong> – The embeddings of shape (N, D) for which the ratings should
+be predicted.</p></li>
+<li><p><strong>ref_emb</strong> – The reference embeddings.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of ratings of shape (N,).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.pseudo_rating.estimate_score_precision">
+<span class="sig-prename descclassname"><span class="pre">pereval.pseudo_rating.</span></span><span class="sig-name descname"><span class="pre">estimate_score_precision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_lst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/pseudo_rating.html#estimate_score_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.pseudo_rating.estimate_score_precision" title="Link to this definition"></a></dt>
+<dd><p>Estimates the score-conditional precision matrix (the inverse
+of the covariance).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cov_emb</strong> – The embeddings of shape (N, D).</p></li>
+<li><p><strong>score_lst</strong> – The names of the pieces for each embedding.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Score-conditional precision matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pereval.run_correlation">
+<span id="pereval-run-correlation-module"></span><h2>pereval.run_correlation module<a class="headerlink" href="#module-pereval.run_correlation" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.run_correlation.get_dataset_correlation">
+<span class="sig-prename descclassname"><span class="pre">pereval.run_correlation.</span></span><span class="sig-name descname"><span class="pre">get_dataset_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">real_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_alignment_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_alignment_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_score_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right_percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/run_correlation.html#get_dataset_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.run_correlation.get_dataset_correlation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.run_correlation.main">
+<span class="sig-prename descclassname"><span class="pre">pereval.run_correlation.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/run_correlation.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.run_correlation.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pereval.run_embed_aria">
+<span id="pereval-run-embed-aria-module"></span><h2>pereval.run_embed_aria module<a class="headerlink" href="#module-pereval.run_embed_aria" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.run_embed_aria.main">
+<span class="sig-prename descclassname"><span class="pre">pereval.run_embed_aria.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/run_embed_aria.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.run_embed_aria.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pereval.run_kde">
+<span id="pereval-run-kde-module"></span><h2>pereval.run_kde module<a class="headerlink" href="#module-pereval.run_kde" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.run_kde.extract_features">
+<span class="sig-prename descclassname"><span class="pre">pereval.run_kde.</span></span><span class="sig-name descname"><span class="pre">extract_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">perf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_perf_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">note_aligner</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/run_kde.html#extract_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.run_kde.extract_features" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.run_kde.get_dataset_kde">
+<span class="sig-prename descclassname"><span class="pre">pereval.run_kde.</span></span><span class="sig-name descname"><span class="pre">get_dataset_kde</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_score_dir</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/pereval/run_kde.html#get_dataset_kde"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.run_kde.get_dataset_kde" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.run_kde.main">
+<span class="sig-prename descclassname"><span class="pre">pereval.run_kde.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/run_kde.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.run_kde.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pereval.run_permute_velocity">
+<span id="pereval-run-permute-velocity-module"></span><h2>pereval.run_permute_velocity module<a class="headerlink" href="#module-pereval.run_permute_velocity" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.run_permute_velocity.main">
+<span class="sig-prename descclassname"><span class="pre">pereval.run_permute_velocity.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/run_permute_velocity.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.run_permute_velocity.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pereval.run_save_alignment">
+<span id="pereval-run-save-alignment-module"></span><h2>pereval.run_save_alignment module<a class="headerlink" href="#module-pereval.run_save_alignment" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.run_save_alignment.main">
+<span class="sig-prename descclassname"><span class="pre">pereval.run_save_alignment.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/run_save_alignment.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.run_save_alignment.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pereval.run_shift_notes">
+<span id="pereval-run-shift-notes-module"></span><h2>pereval.run_shift_notes module<a class="headerlink" href="#module-pereval.run_shift_notes" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.run_shift_notes.main">
+<span class="sig-prename descclassname"><span class="pre">pereval.run_shift_notes.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/run_shift_notes.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.run_shift_notes.main" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pereval.utils">
+<span id="pereval-utils-module"></span><h2>pereval.utils module<a class="headerlink" href="#module-pereval.utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.utils.calculate_ci">
+<span class="sig-prename descclassname"><span class="pre">pereval.utils.</span></span><span class="sig-name descname"><span class="pre">calculate_ci</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/utils.html#calculate_ci"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.utils.calculate_ci" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pereval">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pereval" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Dmitrii Gavrilev.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
