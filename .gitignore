@@ -16,6 +16,7 @@ data/
 models/
 wandb/
 docs/
+dist/
 #tokenizers/
 wip_notebooks/
 misc_scripts/
