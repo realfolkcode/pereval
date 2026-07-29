@@ -6,7 +6,9 @@
 
 This is an official repository for the paper "Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances" (**Accepted at ISMIR 2026**).
 
-**NOTE:** The paper will be available soon. Please stay tuned! The documentation is still being prepared.
+**NOTE:** The paper will be available soon. Please stay tuned!
+
+[Documentation (WIP)](https://realfolkcode.github.io/pereval/)
 
 ## Overview
 
