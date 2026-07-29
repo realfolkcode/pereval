@@ -82,7 +82,7 @@ class NoteAligner:
         return onset_indices
 
 
-class TheGlueNoteMatcher(object):
+class _TheGlueNoteMatcher(object):
     def __init__(self):
         self.prepare_model()
         self.tokenizer = miditok.Structured()

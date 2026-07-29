@@ -8,7 +8,7 @@ from tqdm import tqdm
 import warnings
 warnings.filterwarnings('ignore')
 
-from pereval.alignment import TheGlueNoteMatcher
+from pereval.alignment import _TheGlueNoteMatcher
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
     score_dir = args.score_dir
     evaluation_dir = args.evaluation_dir
 
-    matcher = TheGlueNoteMatcher()
+    matcher = _TheGlueNoteMatcher()
 
     for score_name in tqdm(os.listdir(evaluation_dir)):
         piece_dir = os.path.join(evaluation_dir, score_name)
