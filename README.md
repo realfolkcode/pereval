@@ -4,9 +4,9 @@
 
 **Dmitrii Gavrilev, Ilya Borovik, and Vladimir Viro**
 
-This is an official repository for the paper "Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances" (**Accepted by ISMIR 2026**).
+This is an official repository for the paper "Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances" (**Accepted at ISMIR 2026**).
 
-**NOTE:** The paper will be available by the end of July/start of August. The documentation and requirements are still being prepared.
+**NOTE:** The paper will be available soon. Please stay tuned! The documentation is still being prepared.
 
 ## Overview
 
@@ -44,4 +44,4 @@ pip install -U pereval
 
 ## Acknowledgements
 
-We would like to thank the authors of [FADtk](https://github.com/microsoft/fadtk), [KADtk](https://github.com/YoonjinXD/kadtk), [Aria](https://github.com/EleutherAI/aria), [CLaMP3](https://github.com/sanderwood/clamp3), and [Parangonar](https://github.com/sildater/parangonar) for their open source contributions in music and audio research.
+We would like to thank the authors of [FADtk](https://github.com/microsoft/fadtk), [KADtk](https://github.com/YoonjinXD/kadtk), [Aria](https://github.com/EleutherAI/aria), [CLaMP3](https://github.com/sanderwood/clamp3), [Parangonar](https://github.com/sildater/parangonar), and [symusic](https://github.com/Yikai-Liao/symusic) for their open source contributions in music and audio research.
