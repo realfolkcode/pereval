@@ -2,11 +2,11 @@
 
 ## Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances
 
+> [![arXiv](https://img.shields.io/badge/arXiv-2511.03425-b31b1b.svg?logo=arXiv)](https://arxiv.org/pdf/2607.27909)
+
 **Dmitrii Gavrilev, Ilya Borovik, and Vladimir Viro**
 
-This is an official repository for the paper "Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances" (**Accepted at ISMIR 2026**).
-
-**NOTE:** The paper will be available soon. Please stay tuned!
+This is an official repository for the paper ["Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances"](https://arxiv.org/pdf/2607.27909) (**Accepted at ISMIR 2026**).
 
 [Documentation (WIP)](https://realfolkcode.github.io/pereval/)
 
@@ -22,7 +22,10 @@ In short, this project aims to go beyond the traditional metrics for expressive 
 
 ## Installation
 
-1. Prerequisites: Please install [torch](https://pytorch.org/) (only versions >=2.3 are supported officially) and [Aria](https://github.com/EleutherAI/aria)
+1. Prerequisites:
+- Python >= 3.12 
+- [torch](https://pytorch.org/) (only versions >=2.3 are supported officially)
+- [Aria](https://github.com/EleutherAI/aria)
 2. Install pereval:
 ```sh
 pip install -U pereval

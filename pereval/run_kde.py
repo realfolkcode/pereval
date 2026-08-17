@@ -87,7 +87,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--evaluation_dir', type=str, required=True, help='path to evaluation dir')
     parser.add_argument('--score_dir', type=str, required=True, help='path to directory with scores')
-    parser.add_argument('--output_filename', type=str, required=True, help='filename of output correlation')
+    parser.add_argument('--output_filename', type=str, required=True, help='filename of output KDE')
 
     args = parser.parse_args()
 

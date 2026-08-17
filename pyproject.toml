@@ -1,6 +1,6 @@
 [project]
 name = "pereval"
-version = "0.1.0"
+version = "0.1.1"
 description = "A toolkit for evaluating MIDI piano performances."
 authors = [
     {name = "Dmitrii Gavrilev",email = "dmitrygavrilyev@gmail.com"}
@@ -8,12 +8,12 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "numpy (>=2.2.0,<3.0.0)",
+    "numpy (<2.0.0)",
     "torch (>=2.3)",
     "pandas (>=2.3.3)",
     "scipy (==1.16.0)",
     "miditok (>=3.0.6.post1)",
-    "parangonar (>=3.1.0)",
+    "parangonar (==3.2.0)",
     "partitura (>=1.6.0)",
     "symusic (>=0.5.8)",
     "scikit-learn (==1.7.1)",
