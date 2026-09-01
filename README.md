@@ -1,8 +1,13 @@
+<div align="center">
+
 # Pereval: Piano Performance Evaluation toolkit
 
 ## Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances
 
-> [![arXiv](https://img.shields.io/badge/arXiv-2511.03425-b31b1b.svg?logo=arXiv)](https://arxiv.org/pdf/2607.27909)
+[![arXiv](https://img.shields.io/badge/arXiv-2607.27909-b31b1b.svg?logo=arXiv)](https://arxiv.org/pdf/2607.27909)
+[![PyPI](https://img.shields.io/pypi/v/pereval)](https://pypi.org/project/pereval/)
+
+</div>
 
 **Dmitrii Gavrilev, Ilya Borovik, and Vladimir Viro**
 
@@ -19,6 +24,21 @@ Traditional metrics (which we coin **attribute-scoped**), such as *Pearson corre
 We adapt recently proposed kernel-based methods from image and audio generation domains for EPR. **Deep feature metrics**, *Kernel Music Distance* (KMD) and *Kernel Performance Distance* (KPD), leverage rich contextual features from Aria and CLaMP3 symbolic music understanding models. The adapted metrics are scalable (do not require alignments) and contextual.
 
 In short, this project aims to go beyond the traditional metrics for expressive MIDI piano performances and unify them under one toolkit to simplify evaluation routines for MIR practitioners.
+
+|                          | Fidelity | Diversity | Alignment-free | Score-aware | Contextual | Per-sample |
+|--------------------------|:--------:|:---------:|:--------------:|:-----------:|:----------:|:----------:|
+| Reconstruction error     | ✅       | ❌        | ❌             | ✅          | ❌         | ✅         |
+| Inter-correlation        | ✅       | ❌        | ❌             | ✅          | ❌         | ✅         |
+| Intra-correlation        | ❌       | ✅        | ❌             | ✅          | ❌         | ❌         |
+| KL Divergence            | ✅       | ✅        | ✅             | ❌          | ❌         | ❌         |
+| Fréchet Music Distance   | ✅       | ✅        | ✅             | ❌          | ✅         | ✅         |
+| Kernel Music Distance    | ✅       | ✅        | ✅             | ❌          | ✅         | ✅         |
+| Kernel Performance Distance | ✅    | ✅        | ✅             | ✅          | ✅         | ✅         |
+| Mahalanobis Distance     | ✅       | ❌        | ✅             | ✅          | ✅         | ✅         |
+| Relative Mahalanobis Distance | ✅  | ❌        | ✅             | ✅          | ✅         | ✅         |
+| Marginal Mahalanobis Distance | ✅  | ❌        | ✅             | ❌          | ✅         | ✅         |
+
+*Comparison of attribute-scoped and deep feature metrics for evaluating MIDI piano performances.*
 
 ## Installation
 
@@ -37,12 +57,7 @@ pip install -U pereval
 - `/examples/` contains the notebooks for data analysis and examples of usage
 
 **Command-line interface:**
-- `pereval-save-alignment` - calculates the note alignment using Parangonar
-- `pereval-correlation` - calculates attribute-scoped correlations between sets of performances
-- `pereval-kde` - calculates Kernel Density Estimators for attribute-scoped KL-divergence
-- `pereval-embed-aria` - extracts Aria embeddings
-- `pereval-shift-notes` - shifts (truncates the first few) notes in performances
-- `pereval-permute-velocity` - transfers the velocities of the notes between performances
+Please refer to the [documentation](https://realfolkcode.github.io/pereval/cli.html) for examples of CLI usage.
 
 **Notebooks:**
 - `mahalanobis_pseudo_ratings.ipynb` - comparing Mahalanobis-based Aria pseudo-ratings with human MOS from the listening test 
