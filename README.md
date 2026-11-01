@@ -65,3 +65,16 @@ Please refer to the [documentation](https://realfolkcode.github.io/pereval/cli.h
 ## Acknowledgements
 
 We would like to thank the authors of [FADtk](https://github.com/microsoft/fadtk), [KADtk](https://github.com/YoonjinXD/kadtk), [Aria](https://github.com/EleutherAI/aria), [CLaMP3](https://github.com/sanderwood/clamp3), [Parangonar](https://github.com/sildater/parangonar), and [symusic](https://github.com/Yikai-Liao/symusic) for their open source contributions in music and audio research.
+
+## Citation
+
+If you use this package in your research, please consider citing:
+
+```bibtex
+@inproceedings{gavrilev2026integrating,
+    title     = {Integrating Contextual Embeddings into Evaluation of Expressive MIDI Piano Performances},
+    author    = {Gavrilev, Dmitrii and Borovik, Ilya and Viro, Vladimir},
+    year      = 2026,
+    booktitle = {Proceedings of the 27th International Society for Music Information Retrieval Conference (ISMIR)},
+}
+```
