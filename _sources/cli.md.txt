@@ -1,0 +1,105 @@
+# Command-line usage
+
+More information will be added soon
+## MIDI path convention
+
+Please note that the command-line utilities assume a certain MIDI filepath convention and structure. Suppose that one wants to calculate a distributional discrepancy between two sets of MIDI performances (e.g., sets `real` and `generated`). Then, these performances should be located in separate directories structured in the following way:
+
+```
+real/
+├── liszt_liebestraum/
+│   ├── lang_lang.mid
+│   ├── kissin.mid
+├── ravel_le_tombeau_de_couperin/
+│   ├── yuja_wang.mid
+│   ├── martha_argerich.mid
+│   ├── seong_jin_cho.mid
+
+gen/
+├── liszt_liebestraum/
+│   ├── perf_0.mid
+│   ├── perf_1.mid
+│   ├── perf_2.mid
+│   ├── perf_3.mid
+├── ravel_le_tombeau_de_couperin/
+│   ├── perf_0.mid
+│   ├── perf_1.mid
+```
+
+Note that the naming of the pieces in both sets should match, whereas the naming of performances can be arbitrary.
+
+## Extracting Aria embeddings
+
+```bash
+pereval-embed-aria
+```
+
+Options:
+- `--checkpoint_path` the path to the Aria checkpoint
+- `--evaluation_dir` the directory containing MIDI performances
+
+Extracts Aria embeddings. The embeddings are saved as a single file `aria_emb_fix.pt` in `evaluation_dir`.
+
+## Aligning scores and performances
+
+```bash
+pereval-save-alignment
+```
+
+Options:
+- `--score_dir` a directory with MIDI scores
+- `--evaluation_dir` a directory with MIDI performances
+
+Calculates the note alignment using Parangonar's TheGlueNoteMatcher (requires GPU). Saves the `.match` alignment files in `evaluation_dir`.
+
+## Attribute-scoped correlations
+
+```bash
+pereval-correlation
+```
+
+Options:
+- `--real_dir` a directory with MIDI performances
+- `--gen_dir` a directory with MIDI performances
+- `--real_alignment_dir` the directory with alignments for `--real_dir` 
+- `--gen_alignment_dir` the directory with alignments for `--gen_dir`
+- `--score_dir` the directory with MIDI scores
+- `--output_filename` the filename for output correlations (e.g., `inter-correlation.pt`)
+
+Calculates attribute-scoped Pearson correlations between sets of performances. Saves the correlations into a dictionary with torch tensors.
+
+## Density estimation for KL-divergence calcualtion
+
+```bash
+pereval-kde
+```
+
+Options:
+- `--evaluation_dir` a directory with MIDI performances
+- `--score_dir` a directory with MIDI scores
+- `--output_filename` the filename for output correlation (e.g., `kde.skops`)
+
+Calculates Kernel Density Estimators (KDE) needed for calculating attribute-scoped KL-divergence. Saves KDE as a sklearn model into a `.skops` file.
+
+## Shift notes
+
+```bash
+pereval-shift-notes
+```
+Options:
+- `--evaluation_dir` a directory with MIDI performances
+- `--output_dir` an output directory with modified MIDI performances
+- `--shift` the number of notes to shift
+
+Shifts (truncates the first few) notes in performances. Described in Section 4.2 of [the ISMIR paper](https://arxiv.org/pdf/2607.27909). Creates a new directory with modified performances.
+
+## Transferring velocities
+
+```bash
+pereval-permute-velocity
+```
+Options:
+- `--evaluation_dir`a directory with MIDI performances
+- `--output_dir` an output directory with modified MIDI performances
+
+Transfers the velocities of the notes between performances. See Section 4.2 of [the ISMIR paper](https://arxiv.org/pdf/2607.27909) for more details.
