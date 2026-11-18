@@ -46,6 +46,7 @@ In short, this project aims to go beyond the traditional metrics for expressive 
 - Python >= 3.12 
 - [torch](https://pytorch.org/) (only versions >=2.3 are supported officially)
 - [Aria](https://github.com/EleutherAI/aria)
+- [Aria checkpoint (medium embedding)](https://huggingface.co/loubb/aria-medium-embedding/resolve/main/model.safetensors?download=true)
 2. Install pereval:
 ```sh
 pip install -U pereval
@@ -60,6 +61,7 @@ pip install -U pereval
 Please refer to the [documentation](https://realfolkcode.github.io/pereval/cli.html) for examples of CLI usage.
 
 **Notebooks:**
+- `kpd_estimation.ipynb` - Kernel Performance Distance between two sets of MIDI performances
 - `mahalanobis_pseudo_ratings.ipynb` - comparing Mahalanobis-based Aria pseudo-ratings with human MOS from the listening test 
 
 ## Acknowledgements
