@@ -4,6 +4,7 @@
 - Python >= 3.12 
 - [torch](https://pytorch.org/) (only versions >=2.3 are supported officially)
 - [Aria](https://github.com/EleutherAI/aria)
+- [Aria checkpoint (medium embedding)](https://huggingface.co/loubb/aria-medium-embedding/resolve/main/model.safetensors?download=true)
 2. Install pereval:
 ```sh
 pip install -U pereval

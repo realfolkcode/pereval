@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="prev" title="API Reference" href="api.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>pereval package - Pereval 0.1.1 documentation</title>
+        <title>pereval package - Pereval 0.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">Pereval 0.1.1 documentation</div></a>
+      <a href="index.html"><div class="brand">Pereval 0.2.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">Pereval 0.1.1 documentation</span>
+  <span class="sidebar-brand-text">Pereval 0.2.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -372,14 +372,18 @@ and a list of performance names.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pereval.feature_extractor.get_aria_embeddings">
-<span class="sig-prename descclassname"><span class="pre">pereval.feature_extractor.</span></span><span class="sig-name descname"><span class="pre">get_aria_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evaluation_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/pereval/feature_extractor.html#get_aria_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.feature_extractor.get_aria_embeddings" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pereval.feature_extractor.</span></span><span class="sig-name descname"><span class="pre">get_aria_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_path_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/feature_extractor.html#get_aria_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.feature_extractor.get_aria_embeddings" title="Link to this definition"></a></dt>
 <dd><p>Constructs Aria embeddings for performances.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>evaluation_dir</strong> – A directory with performances.</p></li>
 <li><p><strong>model</strong> – Aria model.</p></li>
 <li><p><strong>device</strong> – Device.</p></li>
+<li><p><strong>evaluation_dir</strong> – A directory with score subdirectories and performances
+within them.</p></li>
+<li><p><strong>evaluation_path_dict</strong> – A dictionary with score names as keys and lists
+of performance paths as values. A more flexible alternative to
+<cite>evaluation_dir</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -660,6 +664,20 @@ of the covariance).</p>
 <span class="sig-prename descclassname"><span class="pre">pereval.utils.</span></span><span class="sig-name descname"><span class="pre">calculate_ci</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pereval/utils.html#calculate_ci"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.utils.calculate_ci" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="pereval.utils.load_json">
+<span class="sig-prename descclassname"><span class="pre">pereval.utils.</span></span><span class="sig-name descname"><span class="pre">load_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pereval/utils.html#load_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pereval.utils.load_json" title="Link to this definition"></a></dt>
+<dd><p>Loads json.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>json_path</strong> – The path to json.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The content of json file.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-pereval">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pereval" title="Link to this heading"></a></h2>
@@ -783,6 +801,7 @@ of the covariance).</p>
 </li>
 <li><a class="reference internal" href="#module-pereval.utils">pereval.utils module</a><ul>
 <li><a class="reference internal" href="#pereval.utils.calculate_ci"><code class="docutils literal notranslate"><span class="pre">calculate_ci()</span></code></a></li>
+<li><a class="reference internal" href="#pereval.utils.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-pereval">Module contents</a></li>
@@ -799,7 +818,7 @@ of the covariance).</p>
   </div>
 </div><script src="_static/jquery.js?v=5d32c60e"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="_static/documentation_options.js?v=a58bc63e"></script>
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>

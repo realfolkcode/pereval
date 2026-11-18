@@ -36,9 +36,10 @@ pereval-embed-aria
 
 Options:
 - `--checkpoint_path` the path to the Aria checkpoint
-- `--evaluation_dir` the directory containing MIDI performances
+- `--evaluation_path` the directory containing MIDI performances **or** a .json dictionary with score IDs as keys and performance paths as values
+- `--output_path` the path to .pt file where the embeddings will be saved
 
-Extracts Aria embeddings. The embeddings are saved as a single file `aria_emb_fix.pt` in `evaluation_dir`.
+Extracts Aria embeddings. The embeddings are saved as a single file `output_path`.
 
 ## Aligning scores and performances
 
