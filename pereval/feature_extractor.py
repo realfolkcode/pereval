@@ -81,36 +81,49 @@ class FeatureExtractor:
         return embeddings, score_lst, perf_lst
 
 
-def get_aria_embeddings(evaluation_dir: str,
-                        model: nn.Module,
-                        device) -> Dict:
+def get_aria_embeddings(model: nn.Module,
+                        device: str,
+                        evaluation_dir: str | None = None,
+                        evaluation_path_dict: Dict[str, List] | None = None) -> Dict[str, Dict]:
     """Constructs Aria embeddings for performances.
 
     Args:
-        evaluation_dir: A directory with performances.
         model: Aria model.
         device: Device.
+        evaluation_dir: A directory with score subdirectories and performances
+          within them.
+        evaluation_path_dict: A dictionary with score names as keys and lists
+          of performance paths as values. A more flexible alternative to
+          `evaluation_dir`.
 
     Return:
         A dictionary with score names as keys.
     """
     emb_dict = {}
 
-    for i, score_name in enumerate(tqdm(os.listdir(evaluation_dir))):
-        score_dir = os.path.join(evaluation_dir, score_name)
-        if not os.path.isdir(score_dir):
-            continue
+    if evaluation_dir is not None:
+        evaluation_path_dict = {}
 
+        for score_name in os.listdir(evaluation_dir):
+            score_dir = os.path.join(evaluation_dir, score_name)
+            if not os.path.isdir(score_dir):
+                continue
+
+            evaluation_path_dict[score_name] = []
+            for perf_name in os.listdir(score_dir):
+                if perf_name.endswith(".mid") or perf_name.endswith(".midi"):
+                    perf_path = os.path.join(score_dir, perf_name)  
+                    evaluation_path_dict[score_name].append(perf_path)
+
+    for score_name in tqdm(evaluation_path_dict):
         emb_dict[score_name] = {}
 
-        for perf_name in os.listdir(score_dir):
-            if perf_name.endswith(".mid") or perf_name.endswith(".midi"):
-                perf_path = os.path.join(score_dir, perf_name)
-                emb = get_global_embedding_from_midi(
-                    model=model,
-                    midi_path=perf_path,
-                    device=device,
-                )
-                emb_dict[score_name][perf_name] = emb.unsqueeze(0).cpu()
+        for perf_path in evaluation_path_dict[score_name]:
+            emb = get_global_embedding_from_midi(
+                model=model,
+                midi_path=perf_path,
+                device=device,
+            )
+            emb_dict[score_name][perf_path] = emb.unsqueeze(0).cpu()
     
     return emb_dict
